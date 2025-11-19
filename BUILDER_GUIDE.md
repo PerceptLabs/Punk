@@ -1,12 +1,12 @@
-# Atompunk Web Builder Guide
+# Mohawk Guide
 
-Complete guide to using the Atompunk Web Builder - the visual AI-powered application builder.
+Complete guide to using the Mohawk - the visual AI-powered application builder.
 
 ---
 
 ## Table of Contents
 
-1. [What is Atompunk Builder?](#what-is-atompunk-builder)
+1. [What is Mohawk?](#what-is-atompunk-builder)
 2. [Getting Started](#getting-started)
 3. [Interface Overview](#interface-overview)
 4. [Building Your First App](#building-your-first-app)
@@ -19,9 +19,9 @@ Complete guide to using the Atompunk Web Builder - the visual AI-powered applica
 
 ---
 
-## What is Atompunk Builder?
+## What is Mohawk?
 
-**Atompunk Web Builder** is a web-based application similar to Bolt.new or Lovable.dev, but with the safety and reliability of Punk's schema-based approach.
+**Mohawk** is a web-based application similar to Bolt.new or Lovable.dev, but with the safety and reliability of Punk's schema-based approach.
 
 ### Key Features
 
@@ -104,7 +104,7 @@ pnpm dev
 
 ```
 ┌────────────────────────────────────────────────────────────────┐
-│ Atompunk Builder            [New Project] [Deploy] [Settings]  │
+│ Mohawk            [New Project] [Deploy] [Settings]  │
 ├────────────────────────────────────────────────────────────────┤
 │                                                                │
 │ ┌──────────────────────┬───────────────────────────────────┐  │

@@ -43,7 +43,7 @@ The Punk Framework is built on a **layered architecture** that separates concern
 │                     USER INTERFACES                         │
 │                                                             │
 │  ┌──────────────────┐           ┌──────────────────┐       │
-│  │   Punk CLI       │           │ Atompunk Builder │       │
+│  │   Punk CLI       │           │ Mohawk │       │
 │  │   (Go + Charm)   │           │   (React SPA)    │       │
 │  └────────┬─────────┘           └────────┬─────────┘       │
 └───────────┼──────────────────────────────┼─────────────────┘

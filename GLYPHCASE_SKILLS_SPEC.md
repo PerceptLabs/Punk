@@ -223,7 +223,7 @@ punk add skill pdf-processor
 
 ### Builder Installation
 
-1. Open Atompunk Builder
+1. Open Mohawk
 2. Navigate to **Extensions > Skills**
 3. Browse available skills
 4. Click **Install** for one-click installation

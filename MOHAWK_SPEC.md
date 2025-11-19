@@ -1,4 +1,4 @@
-# ATOMPUNK Builder Specification
+# Mohawk Specification
 
 ## Overview
 A web-based AI application builder delivering a seamless chat-to-deployment experience. Users prompt Claude for app schemas, preview updates in real-time, and deploy with one click.

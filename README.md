@@ -200,7 +200,7 @@ Punk is organized into three progressive tiers:
 - Skill management
 - Built with Go + Charm
 
-**2. Atompunk Web Builder** (For Builders)
+**2. Mohawk** (For Builders)
 - Web-based (SaaS or self-hosted)
 - Chat with AI to build apps
 - Live preview
@@ -433,7 +433,7 @@ Browse and publish skills at [https://skills.punk.dev](https://skills.punk.dev)
 - ✅ Multiple backend adapters
 
 ### v1.1 (Q1 2026)
-- 🔲 Atompunk Web Builder (SaaS)
+- 🔲 Mohawk (SaaS)
 - 🔲 Visual schema editor
 - 🔲 Real-time collaboration
 - 🔲 One-click deployment
