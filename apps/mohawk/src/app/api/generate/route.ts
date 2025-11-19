@@ -16,6 +16,7 @@ export async function POST(req: NextRequest) {
 
     // Initialize Epoch Engine
     const engine = new EpochEngine({
+      provider: 'anthropic',
       model: 'claude-sonnet-4-20250514',
       apiKey: process.env.ANTHROPIC_API_KEY || '',
     })

@@ -209,7 +209,7 @@ function SettingsPanel() {
   )
 }
 
-export function SchemaInspector({ schema, onSchemaChange }: SchemaInspectorProps) {
+export function SchemaInspector({ schema, onSchemaChange: _onSchemaChange }: SchemaInspectorProps) {
   const tabs: TabConfig[] = [
     {
       value: 'schema',

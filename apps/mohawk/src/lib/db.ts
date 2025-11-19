@@ -104,10 +104,10 @@ export const db = new GlyphCase({
 
 /**
  * Initialize database and ensure tables exist
+ * Note: GlyphCase initializes tables in constructor, so this is a no-op
  */
 export async function initializeDatabase() {
   try {
-    await db.initialize()
     console.log('Database initialized successfully')
   } catch (error) {
     console.error('Failed to initialize database:', error)
@@ -119,9 +119,9 @@ export async function initializeDatabase() {
  * Project operations
  */
 export const projectOperations = {
-  async create(name: string, description?: string, userId?: number) {
+  create(name: string, description?: string, userId?: number) {
     const now = Date.now()
-    return await db.insert('projects', {
+    return db.insert('projects', {
       name,
       description,
       userId,
@@ -130,24 +130,28 @@ export const projectOperations = {
     })
   },
 
-  async get(id: number) {
-    return await db.query('projects', { where: { id } }).first()
+  get(id: number) {
+    const rows = db.query('SELECT * FROM projects WHERE id = ?', [id])
+    return rows[0] || null
   },
 
-  async update(id: number, updates: { name?: string; description?: string; schema?: string }) {
-    return await db.update('projects', {
+  update(id: number, updates: { name?: string; description?: string; schema?: string }) {
+    db.update('projects', id, {
       ...updates,
       updatedAt: Date.now()
-    }, { where: { id } })
+    })
+    return this.get(id)
   },
 
-  async delete(id: number) {
-    return await db.delete('projects', { where: { id } })
+  delete(id: number) {
+    db.delete('projects', id)
   },
 
-  async list(userId?: number) {
-    const where = userId ? { userId } : {}
-    return await db.query('projects', { where, orderBy: { createdAt: 'DESC' } })
+  list(userId?: number) {
+    if (userId) {
+      return db.query('SELECT * FROM projects WHERE userId = ? ORDER BY createdAt DESC', [userId])
+    }
+    return db.query('SELECT * FROM projects ORDER BY createdAt DESC')
   }
 }
 
@@ -155,8 +159,8 @@ export const projectOperations = {
  * Revision operations
  */
 export const revisionOperations = {
-  async create(projectId: number, schema: string, actor: 'user' | 'ai', prompt?: string) {
-    return await db.insert('revisions', {
+  create(projectId: number, schema: string, actor: 'user' | 'ai', prompt?: string) {
+    return db.insert('revisions', {
       projectId,
       schema,
       actor,
@@ -165,15 +169,16 @@ export const revisionOperations = {
     })
   },
 
-  async listByProject(projectId: number) {
-    return await db.query('revisions', {
-      where: { projectId },
-      orderBy: { createdAt: 'DESC' }
-    })
+  listByProject(projectId: number) {
+    return db.query(
+      'SELECT * FROM revisions WHERE projectId = ? ORDER BY createdAt DESC',
+      [projectId]
+    )
   },
 
-  async get(id: number) {
-    return await db.query('revisions', { where: { id } }).first()
+  get(id: number) {
+    const rows = db.query('SELECT * FROM revisions WHERE id = ?', [id])
+    return rows[0] || null
   }
 }
 
@@ -181,8 +186,8 @@ export const revisionOperations = {
  * Conversation operations
  */
 export const conversationOperations = {
-  async add(projectId: number, role: 'user' | 'assistant', content: string) {
-    return await db.insert('conversations', {
+  add(projectId: number, role: 'user' | 'assistant', content: string) {
+    return db.insert('conversations', {
       projectId,
       role,
       content,
@@ -190,12 +195,17 @@ export const conversationOperations = {
     })
   },
 
-  async listByProject(projectId: number, limit?: number) {
-    return await db.query('conversations', {
-      where: { projectId },
-      orderBy: { createdAt: 'ASC' },
-      limit
-    })
+  listByProject(projectId: number, limit?: number) {
+    if (limit) {
+      return db.query(
+        'SELECT * FROM conversations WHERE projectId = ? ORDER BY createdAt ASC LIMIT ?',
+        [projectId, limit]
+      )
+    }
+    return db.query(
+      'SELECT * FROM conversations WHERE projectId = ? ORDER BY createdAt ASC',
+      [projectId]
+    )
   }
 }
 
@@ -203,8 +213,8 @@ export const conversationOperations = {
  * Deployment operations
  */
 export const deploymentOperations = {
-  async create(projectId: number, platform: string, revisionId?: number) {
-    return await db.insert('deployments', {
+  create(projectId: number, platform: string, revisionId?: number) {
+    return db.insert('deployments', {
       projectId,
       revisionId,
       platform,
@@ -213,21 +223,23 @@ export const deploymentOperations = {
     })
   },
 
-  async updateStatus(id: number, status: string, logs?: string, url?: string) {
+  updateStatus(id: number, status: string, logs?: string, url?: string) {
     const updates: any = { status }
     if (logs) updates.logs = logs
     if (url) updates.url = url
     if (status === 'success' || status === 'failed') {
       updates.completedAt = Date.now()
     }
-    return await db.update('deployments', updates, { where: { id } })
+    db.update('deployments', id, updates)
+    const rows = db.query('SELECT * FROM deployments WHERE id = ?', [id])
+    return rows[0] || null
   },
 
-  async listByProject(projectId: number) {
-    return await db.query('deployments', {
-      where: { projectId },
-      orderBy: { createdAt: 'DESC' }
-    })
+  listByProject(projectId: number) {
+    return db.query(
+      'SELECT * FROM deployments WHERE projectId = ? ORDER BY createdAt DESC',
+      [projectId]
+    )
   }
 }
 

@@ -48,7 +48,6 @@ export default function BuilderPage() {
 
       const reader = response.body?.getReader()
       const decoder = new TextDecoder()
-      let accumulatedSchema = ''
       let assistantMessage = ''
 
       if (reader) {
@@ -69,7 +68,6 @@ export default function BuilderPage() {
 
                 if (patch.type === 'schema_chunk') {
                   // Update schema in real-time
-                  accumulatedSchema = patch.data
                   setSchema(patch.data)
                 } else if (patch.type === 'message_chunk') {
                   // Accumulate assistant message
@@ -77,7 +75,6 @@ export default function BuilderPage() {
                 } else if (patch.type === 'schema_complete') {
                   // Final schema
                   setSchema(patch.data)
-                  accumulatedSchema = patch.data
                 } else if (patch.type === 'error') {
                   console.error('Schema generation error:', patch.message)
                 }

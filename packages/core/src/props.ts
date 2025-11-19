@@ -65,7 +65,7 @@ function interpolateString(template: string, data: DataContext): string {
   // Match {{...}} patterns
   const regex = /\{\{([^}]+)\}\}/g
 
-  return template.replace(regex, (match, path) => {
+  return template.replace(regex, (_match, path) => {
     const trimmedPath = path.trim()
     const value = getValueFromPath(trimmedPath, data)
 

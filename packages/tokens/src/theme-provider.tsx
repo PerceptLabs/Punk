@@ -1,3 +1,5 @@
+'use client'
+
 /**
  * Punk Theme Provider
  *

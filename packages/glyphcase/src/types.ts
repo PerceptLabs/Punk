@@ -166,14 +166,27 @@ export interface ColumnDef {
   name: string;
   type: 'INTEGER' | 'TEXT' | 'REAL' | 'BLOB' | 'JSON';
   primary?: boolean;
+  autoIncrement?: boolean;
   unique?: boolean;
   notNull?: boolean;
   default?: any;
 }
 
+export interface ForeignKeyDef {
+  columns: string[];
+  references: {
+    table: string;
+    columns: string[];
+  };
+  onDelete?: 'CASCADE' | 'SET NULL' | 'RESTRICT' | 'NO ACTION';
+  onUpdate?: 'CASCADE' | 'SET NULL' | 'RESTRICT' | 'NO ACTION';
+}
+
 export interface TableDef {
   name: string;
   columns: ColumnDef[];
+  indexes?: IndexDef[];
+  foreignKeys?: ForeignKeyDef[];
   capsule?: {
     watch: boolean;
     batchSize?: number;
@@ -183,7 +196,6 @@ export interface TableDef {
 
 export interface IndexDef {
   name: string;
-  table: string;
   columns: string[];
   unique?: boolean;
 }

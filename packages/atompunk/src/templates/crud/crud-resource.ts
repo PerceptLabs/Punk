@@ -149,7 +149,7 @@ export const list${p.resourceName} = api(
     const countResult = await db.query(
       \`SELECT COUNT(*) as total FROM ${p.resourceName}
        WHERE 1=1 ${p.enableSoftDelete ? 'AND deleted_at IS NULL' : ''}
-       ${p.ownershipField ? \`AND ${p.ownershipField} = $1\` : ''}\`,
+       ${p.ownershipField ? 'AND ' + p.ownershipField + ' = $1' : ''}\`,
       ${p.ownershipField ? '[ctx.auth.userId]' : '[]'}
     )
 
@@ -158,7 +158,7 @@ export const list${p.resourceName} = api(
     const result = await db.query(
       \`SELECT * FROM ${p.resourceName}
        WHERE 1=1 ${p.enableSoftDelete ? 'AND deleted_at IS NULL' : ''}
-       ${p.ownershipField ? \`AND ${p.ownershipField} = $1\` : ''}
+       ${p.ownershipField ? 'AND ' + p.ownershipField + ' = $1' : ''}
        ORDER BY \${sortBy} \${sortOrder}
        LIMIT $${p.ownershipField ? '2' : '1'} OFFSET $${p.ownershipField ? '3' : '2'}\`,
       ${p.ownershipField ? '[ctx.auth.userId, req.limit, offset]' : '[req.limit, offset]'}

@@ -17,11 +17,8 @@ var (
 	LightGray  = lipgloss.Color("#E0E0E0")
 	MediumGray = lipgloss.Color("#666666")
 
-	// Semantic colors
-	Success = Green
-	Warning = lipgloss.Color("#FFB700")
-	Error   = Pink
-	Info    = Cyan
+	// Warning color (not aliased to avoid redeclaration)
+	WarningColor = lipgloss.Color("#FFB700")
 )
 
 // Text styles
@@ -50,15 +47,15 @@ var (
 		Bold(true)
 
 	Warning = lipgloss.NewStyle().
-		Foreground(Warning).
+		Foreground(WarningColor).
 		Bold(true)
 
 	Error = lipgloss.NewStyle().
-		Foreground(Error).
+		Foreground(Pink).
 		Bold(true)
 
 	Info = lipgloss.NewStyle().
-		Foreground(Info)
+		Foreground(Cyan)
 
 	Muted = lipgloss.NewStyle().
 		Foreground(MediumGray).
@@ -149,7 +146,7 @@ var (
 		Bold(true)
 
 	StatusError = lipgloss.NewStyle().
-		Foreground(Error).
+		Foreground(Pink).
 		Bold(true)
 )
 
@@ -195,13 +192,13 @@ func StatusIcon(status string) string {
 	case "success":
 		return lipgloss.NewStyle().Foreground(Green).Render("✓")
 	case "error":
-		return lipgloss.NewStyle().Foreground(Error).Render("✗")
+		return lipgloss.NewStyle().Foreground(Pink).Render("✗")
 	case "warning":
-		return lipgloss.NewStyle().Foreground(Warning).Render("⚠")
+		return lipgloss.NewStyle().Foreground(WarningColor).Render("⚠")
 	case "running":
 		return lipgloss.NewStyle().Foreground(Cyan).Render("◐")
 	case "info":
-		return lipgloss.NewStyle().Foreground(Info).Render("ℹ")
+		return lipgloss.NewStyle().Foreground(Cyan).Render("ℹ")
 	default:
 		return "•"
 	}
