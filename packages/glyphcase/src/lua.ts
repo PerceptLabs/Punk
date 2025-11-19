@@ -171,11 +171,11 @@ export class LuaRuntime {
 
       // Note: bcrypt would require additional dependency
       // Left as placeholder for implementation
-      bcrypt: (password: string) => {
+      bcrypt: (_password: string) => {
         throw new Error('bcrypt not yet implemented - add bcrypt dependency');
       },
 
-      verify: (password: string, hash: string) => {
+      verify: (_password: string, _hash: string) => {
         throw new Error('bcrypt not yet implemented - add bcrypt dependency');
       }
     };

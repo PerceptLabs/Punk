@@ -27,5 +27,8 @@ export { StreamingPatchExtractor } from './streaming'
 // Export context utilities
 export { createContext, buildComponentRegistry, buildTokenRegistry, updateContextMetrics, estimateTokens } from './context'
 
+// Export logging utilities
+export { configureLogging, createLogger, loggers, redact } from './logger'
+
 // Export all types
 export type * from './types'

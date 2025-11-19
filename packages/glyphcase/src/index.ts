@@ -10,6 +10,7 @@ export { LuaRuntime } from './lua';
 export { SkillManager } from './skill';
 export { SyncEngine } from './sync';
 export { createLuaBindings } from './bindings';
+export { configureLogging, createLogger, loggers, redact } from './logger';
 
 export type {
   // Core types

@@ -149,12 +149,12 @@ export function createLuaBindings(
         return crypto.randomUUID();
       },
 
-      bcrypt: (password: string) => {
+      bcrypt: (_password: string) => {
         // Placeholder - requires bcrypt package
         throw new Error('bcrypt not implemented - add bcrypt package');
       },
 
-      verify: (password: string, hash: string) => {
+      verify: (_password: string, _hash: string) => {
         // Placeholder - requires bcrypt package
         throw new Error('bcrypt verify not implemented - add bcrypt package');
       }

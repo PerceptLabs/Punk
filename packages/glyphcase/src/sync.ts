@@ -167,7 +167,8 @@ export class SyncEngine {
         throw new Error(`Sync push failed: ${response.statusText}`);
       }
 
-      const result = await response.json();
+      // Response received successfully (result unused for now)
+      await response.json();
 
       // Mark changes as synced
       const changeIds = filteredChanges.map(c => c.id);

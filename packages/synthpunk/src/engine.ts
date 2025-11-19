@@ -15,9 +15,10 @@ import {
 } from './types'
 import { LLMProviderFactory } from './providers'
 import { validatePatch, calculateComplexity } from './validation'
-import { SYSTEM_PROMPT, buildUserMessage, buildRecoveryPrompt } from './prompts'
+import { SYSTEM_PROMPT, buildUserMessage } from './prompts'
 import { StreamingPatchExtractor } from './streaming'
 import { updateContextMetrics, estimateTokens } from './context'
+import { loggers } from './logger'
 
 /**
  * Epoch Error Class
@@ -65,6 +66,12 @@ export class EpochEngine {
     this.config = { ...DEFAULT_CONFIG, ...config } as EpochConfig
     this.provider = LLMProviderFactory.create(this.config)
     this.cache = new Map()
+
+    loggers.engine.info('EpochEngine initialized', {
+      provider: this.config.provider,
+      maxRetries: this.config.maxRetries,
+      validateChunks: this.config.validateChunks,
+    })
   }
 
   /**
@@ -77,12 +84,21 @@ export class EpochEngine {
   ): AsyncGenerator<SchemaPatch> {
     const opts: GenerationOptions = { ...DEFAULT_OPTIONS, ...options }
 
+    loggers.engine.info('Schema generation started', {
+      promptLength: userPrompt.length,
+      promptPreview: userPrompt.substring(0, 50),
+      sessionId: context.sessionId,
+      tokenBudget: context.tokenBudget,
+      componentCount: context.componentRegistry.size,
+    })
+
     // 1. Validate input
     this.validateInput(userPrompt, context)
 
     // 2. Check cache
     const cacheKey = this.getCacheKey(userPrompt, context)
     if (this.cache.has(cacheKey)) {
+      loggers.engine.debug('Cache hit', { cacheKey, patchCount: this.cache.get(cacheKey)!.length })
       yield* this.cache.get(cacheKey)!
       return
     }
@@ -109,7 +125,11 @@ export class EpochEngine {
             const validation = await validatePatch(patch, context)
 
             if (!validation.valid) {
-              console.warn(`Invalid patch: ${validation.errors.join(', ')}`)
+              loggers.validation.warn('Invalid patch', {
+                op: patch.op,
+                path: patch.path,
+                errors: validation.errors,
+              })
               errors.push(...validation.errors)
               continue
             }
@@ -117,30 +137,49 @@ export class EpochEngine {
             // Update complexity budget
             const complexity = calculateComplexity(patch)
             context.complexityUsed += complexity
+
+            loggers.engine.debug('Patch generated', {
+              op: patch.op,
+              path: patch.path,
+              complexity,
+              totalComplexity: context.complexityUsed,
+            })
           }
 
           patches.push(patch)
           yield patch
 
           if (patches.length >= opts.maxPatches) {
-            console.warn(`Reached max patches limit: ${opts.maxPatches}`)
+            loggers.engine.warn('Reached max patches limit', { maxPatches: opts.maxPatches })
             break
           }
         }
 
         // Success - cache results
         this.cache.set(cacheKey, patches)
+        loggers.engine.info('Schema generation completed', {
+          patchCount: patches.length,
+          totalComplexity: context.complexityUsed,
+          cached: true,
+        })
         return
       } catch (error) {
         retries++
         errors.push((error as Error).message)
 
-        console.error(`Generation attempt ${retries} failed:`, error)
+        loggers.engine.error('Generation attempt failed', {
+          attempt: retries,
+          maxRetries: this.config.maxRetries,
+          error: (error as Error).message,
+        })
 
         if (retries >= this.config.maxRetries) {
           if (opts.fallbackToSimpler) {
             // Fallback to minimal schema
-            console.warn('Using fallback schema after max retries')
+            loggers.engine.warn('Using fallback schema after max retries', {
+              retries,
+              errorCount: errors.length,
+            })
             yield* this.generateFallbackSchema(userPrompt, context)
           } else {
             throw new EpochError(
@@ -153,7 +192,9 @@ export class EpochEngine {
         }
 
         // Exponential backoff
-        await this.delay(this.config.retryDelayMs * Math.pow(2, retries - 1))
+        const delayMs = this.config.retryDelayMs * Math.pow(2, retries - 1)
+        loggers.engine.debug('Retrying with exponential backoff', { delayMs, attempt: retries })
+        await this.delay(delayMs)
 
         // TODO: Update system prompt with recovery instructions using buildRecoveryPrompt(errors)
       }
@@ -213,7 +254,13 @@ export class EpochEngine {
 
       // Update context metrics
       updateContextMetrics(context, totalTokens, 0)
+      loggers.streaming.debug('LLM streaming completed', { totalTokens })
     } catch (error) {
+      loggers.providers.error('Provider streaming failed', {
+        provider: this.provider.name,
+        model: this.provider.model,
+        error: (error as Error).message,
+      })
       throw new EpochError(
         `Provider streaming failed: ${(error as Error).message}`,
         'PROVIDER_ERROR',

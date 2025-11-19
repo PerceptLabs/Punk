@@ -6,6 +6,7 @@
 import Database from 'better-sqlite3';
 import { v4 as uuid } from 'uuid';
 import { EventBus } from './events';
+import { loggers } from './logger';
 import type {
   Watcher,
   ChangeEvent,
@@ -32,8 +33,17 @@ export class ActiveCapsule {
     this.batchInterval = config?.capsule?.batchInterval ?? 100;
     this.batchSize = config?.capsule?.batchSize ?? 100;
 
+    loggers.capsule.info('ActiveCapsule initialized', {
+      dbPath,
+      batchInterval: this.batchInterval,
+      batchSize: this.batchSize,
+    });
+
     this.setupDatabase();
     this.setupTriggers();
+
+    const watcherCount = this.watchers.size;
+    loggers.capsule.debug('Database setup complete', { watcherCount });
   }
 
   /**
@@ -139,6 +149,12 @@ export class ActiveCapsule {
   createTable(tableDef: TableDef): void {
     const { name, columns, capsule } = tableDef;
 
+    loggers.capsule.info('Creating table', {
+      name,
+      columnCount: columns.length,
+      reactive: capsule?.watch ?? false,
+    });
+
     // Build CREATE TABLE statement
     const columnDefs = columns.map(col => {
       let def = `${col.name} ${col.type}`;
@@ -156,6 +172,7 @@ export class ActiveCapsule {
     // Enable Active Capsule if requested
     if (capsule?.watch) {
       this.createTriggersForTable(name, columns);
+      loggers.capsule.debug('Reactive triggers created', { table: name });
     }
   }
 
@@ -228,7 +245,11 @@ export class ActiveCapsule {
     );
 
     const result = stmt.run(...values);
-    return result.lastInsertRowid as number;
+    const rowId = result.lastInsertRowid as number;
+
+    loggers.capsule.debug('Row inserted', { table, rowId, fieldCount: keys.length });
+
+    return rowId;
   }
 
   /**
@@ -239,7 +260,9 @@ export class ActiveCapsule {
     const values = Object.values(data);
 
     const stmt = this.db.prepare(`UPDATE ${table} SET ${sets} WHERE id = ?`);
-    stmt.run(...values, id);
+    const result = stmt.run(...values, id);
+
+    loggers.capsule.debug('Row updated', { table, id, changes: result.changes });
   }
 
   /**
@@ -247,7 +270,9 @@ export class ActiveCapsule {
    */
   delete(table: string, id: number): void {
     const stmt = this.db.prepare(`DELETE FROM ${table} WHERE id = ?`);
-    stmt.run(id);
+    const result = stmt.run(id);
+
+    loggers.capsule.debug('Row deleted', { table, id, changes: result.changes });
   }
 
   /**
@@ -255,6 +280,12 @@ export class ActiveCapsule {
    */
   watch(table: string, callback: WatchCallback, filter?: string): UnwatchFn {
     const watcherId = uuid();
+
+    loggers.capsule.info('Watcher registered', {
+      watcherId,
+      table,
+      hasFilter: !!filter,
+    });
 
     // Create watcher record
     this.db.prepare(`
@@ -277,6 +308,7 @@ export class ActiveCapsule {
 
     // Return unwatch function
     return () => {
+      loggers.capsule.debug('Watcher unregistered', { watcherId, table });
       unsubscribe();
       this.watchers.delete(watcherId);
       this.db.prepare('UPDATE _capsule_watchers SET is_active = 0 WHERE id = ?').run(watcherId);

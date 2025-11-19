@@ -8,9 +8,8 @@ import {
   DesignToken,
   DataModel,
   TokenBudgetTracker,
-  PunkSchema,
 } from './types'
-import { SYSTEM_PROMPT, buildUserMessage } from './prompts'
+import { SYSTEM_PROMPT } from './prompts'
 
 /**
  * Build default component registry

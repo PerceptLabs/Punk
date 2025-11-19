@@ -22,6 +22,7 @@
   },
   "dependencies": {
     "@punk/core": "workspace:*",
+    "@logtape/logtape": "^0.8.0",
     "better-sqlite3": "^9.2.2",
     "wasmoon": "^1.16.0",
     "uuid": "^9.0.1",
