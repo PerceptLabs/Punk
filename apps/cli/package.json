@@ -1,0 +1,10 @@
+{
+  "name": "@punk/cli",
+  "version": "0.1.0",
+  "description": "Punk Framework CLI",
+  "scripts": {
+    "build": "go build -o ../../dist/punk .",
+    "dev": "go run .",
+    "clean": "rm -rf ../../dist/punk"
+  }
+}

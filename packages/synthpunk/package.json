@@ -1,0 +1,67 @@
+{
+  "name": "@punk/synthpunk",
+  "version": "1.0.0",
+  "description": "Epoch AI Schema Generation Engine - Transform natural language into Punk UI schemas",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsup src/index.ts --format cjs,esm --dts",
+    "dev": "tsup src/index.ts --format cjs,esm --dts --watch",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "type-check": "tsc --noEmit",
+    "lint": "eslint src --ext .ts",
+    "clean": "rm -rf dist"
+  },
+  "keywords": [
+    "punk",
+    "ui",
+    "schema",
+    "ai",
+    "llm",
+    "claude",
+    "gpt",
+    "generator",
+    "epoch"
+  ],
+  "author": "Punk Framework Team",
+  "license": "MIT",
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.20.0",
+    "openai": "^4.0.0",
+    "zod": "^3.22.0",
+    "fast-json-patch": "^3.1.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "typescript": "^5.3.0",
+    "tsup": "^8.0.0",
+    "vitest": "^1.2.0",
+    "eslint": "^8.56.0",
+    "@typescript-eslint/eslint-plugin": "^6.19.0",
+    "@typescript-eslint/parser": "^6.19.0"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/punk-framework/punk.git",
+    "directory": "packages/synthpunk"
+  },
+  "bugs": {
+    "url": "https://github.com/punk-framework/punk/issues"
+  },
+  "homepage": "https://github.com/punk-framework/punk/tree/main/packages/synthpunk#readme"
+}

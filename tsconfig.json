@@ -1,0 +1,32 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "ESNext",
+    "lib": ["ES2022"],
+    "moduleResolution": "bundler",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "composite": true,
+    "incremental": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true,
+    "allowSyntheticDefaultImports": true,
+    "paths": {
+      "@punk/core": ["./packages/core/src"],
+      "@punk/components": ["./packages/components/src"],
+      "@punk/tokens": ["./packages/tokens/src"],
+      "@punk/synthpunk": ["./packages/synthpunk/src"],
+      "@punk/atompunk": ["./packages/atompunk/src"],
+      "@punk/glyphcase": ["./packages/glyphcase/src"]
+    }
+  },
+  "exclude": ["node_modules", "dist", ".turbo"]
+}

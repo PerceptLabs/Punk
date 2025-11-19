@@ -1,0 +1,15 @@
+# Source files
+src/
+examples/
+*.md
+!README.md
+
+# Development
+tsconfig.json
+.gitignore
+*.test.ts
+__tests__/
+
+# Build artifacts
+*.tsbuildinfo
+.turbo/
