@@ -204,7 +204,7 @@ export class SyncEngine {
         throw new Error(`Sync pull failed: ${response.statusText}`);
       }
 
-      const { changes } = await response.json();
+      const { changes } = await response.json() as { changes: ChangeLog[] };
 
       let applied = 0;
       let conflicts = 0;

@@ -77,7 +77,7 @@ function colorScaleToCSSVars(scale: ColorScale, prefix: string): Record<string, 
  */
 export function generateCSSVariables(
   tokens: TokenDefinition,
-  theme: 'light' | 'dark' = 'light'
+  _theme: 'light' | 'dark' = 'light'
 ): CSSVariableMap {
   const cssVars: CSSVariableMap = {}
 

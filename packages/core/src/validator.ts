@@ -4,7 +4,7 @@
  */
 
 import { z } from 'zod'
-import type { PunkNode, PunkSchema, ValidationResult, ComplexityResult } from './types'
+import type { PunkNode, ValidationResult, ComplexityResult } from './types'
 
 /**
  * Complexity budget configuration

@@ -114,15 +114,20 @@ export class ActiveCapsule {
    */
   private setupTriggers(): void {
     // Load existing watchers
-    const watchers = this.db.prepare('SELECT * FROM _capsule_watchers WHERE is_active = 1').all();
+    const watchers = this.db.prepare('SELECT * FROM _capsule_watchers WHERE is_active = 1').all() as Array<{
+      id: string;
+      table_or_query: string;
+      filter_expression?: string;
+      created_at: string;
+    }>;
 
     for (const w of watchers) {
       const watcher: Watcher = {
-        id: w.id as string,
-        tableOrQuery: w.table_or_query as string,
-        filterExpression: w.filter_expression as string | undefined,
+        id: w.id,
+        tableOrQuery: w.table_or_query,
+        filterExpression: w.filter_expression,
         subscriptions: new Set(),
-        createdAt: new Date(w.created_at as string)
+        createdAt: new Date(w.created_at)
       };
       this.watchers.set(watcher.id, watcher);
     }
@@ -276,36 +281,6 @@ export class ActiveCapsule {
       this.watchers.delete(watcherId);
       this.db.prepare('UPDATE _capsule_watchers SET is_active = 0 WHERE id = ?').run(watcherId);
     };
-  }
-
-  /**
-   * Emit change event
-   */
-  private emitChange(table: string, operation: string, row: any): void {
-    const event: ChangeEvent = {
-      watcherId: '',
-      operation: operation as 'INSERT' | 'UPDATE' | 'DELETE',
-      tableName: table,
-      rowId: row.id,
-      newData: row,
-      timestamp: new Date(),
-      transactionId: this.transactionId ?? uuid()
-    };
-
-    this.recordChange(event);
-  }
-
-  /**
-   * Record change and batch
-   */
-  private recordChange(event: ChangeEvent): void {
-    this.eventQueue.push(event);
-
-    if (!this.batchTimer) {
-      this.batchTimer = setTimeout(() => {
-        this.processBatch();
-      }, this.batchInterval);
-    }
   }
 
   /**

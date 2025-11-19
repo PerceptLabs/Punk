@@ -3,8 +3,6 @@
  * TypeScript interfaces for Active Capsule reactive database
  */
 
-import type Database from 'better-sqlite3';
-
 // ============================================================================
 // Active Capsule Types
 // ============================================================================

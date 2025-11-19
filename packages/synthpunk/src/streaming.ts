@@ -105,10 +105,10 @@ export class StreamingPatchExtractor {
 export function applyPatch(schema: PunkSchema, patch: SchemaPatch): PunkSchema {
   // Convert to fast-json-patch format
   const operation: Operation = {
-    op: patch.op as Operation['op'],
+    op: patch.op as any,
     path: patch.path,
     value: patch.value,
-  }
+  } as Operation
 
   if (patch.from) {
     ;(operation as any).from = patch.from
@@ -116,7 +116,7 @@ export function applyPatch(schema: PunkSchema, patch: SchemaPatch): PunkSchema {
 
   try {
     const result = applyJsonPatch([schema], [operation], true, false)
-    return result.newDocument as PunkSchema
+    return (result.newDocument as unknown as PunkSchema[])[ 0]
   } catch (error) {
     throw new Error(`Failed to apply patch: ${(error as Error).message}`)
   }

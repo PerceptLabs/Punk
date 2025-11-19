@@ -18,6 +18,8 @@ export const pubsubChannelTemplate: BackendTemplate = {
   generates: (params) => {
     const p = PubSubChannelParams.parse(params)
 
+    const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1)
+
     const messageFields = Object.entries(p.messageFields).map(([key, type]) => {
       const zodType = {
         string: 'z.string()',

@@ -155,9 +155,7 @@ export class EpochEngine {
         // Exponential backoff
         await this.delay(this.config.retryDelayMs * Math.pow(2, retries - 1))
 
-        // Update system prompt with recovery instructions
-        const recoveryPrompt = buildRecoveryPrompt(errors)
-        // Note: In retry, we'd use recoveryPrompt instead of systemPrompt
+        // TODO: Update system prompt with recovery instructions using buildRecoveryPrompt(errors)
       }
     }
   }
@@ -192,7 +190,7 @@ export class EpochEngine {
     systemPrompt: string,
     userMessage: string,
     context: EpochContext,
-    options: GenerationOptions
+    _options: GenerationOptions
   ): AsyncGenerator<SchemaPatch> {
     const extractor = new StreamingPatchExtractor()
     let totalTokens = 0
@@ -229,7 +227,7 @@ export class EpochEngine {
    */
   private async *generateFallbackSchema(
     userPrompt: string,
-    context: EpochContext
+    _context: EpochContext
   ): AsyncGenerator<SchemaPatch> {
     // Extract key concepts from prompt to build minimal schema
     const keywords = this.extractKeywords(userPrompt)

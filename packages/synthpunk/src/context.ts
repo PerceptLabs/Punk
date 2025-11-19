@@ -334,7 +334,7 @@ export function buildComponentRegistry(): Map<string, ComponentSchema> {
         children: true,
       },
     ],
-  ])
+  ]) as unknown as Map<string, ComponentSchema>
 }
 
 /**

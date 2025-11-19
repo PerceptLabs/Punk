@@ -4,6 +4,7 @@
  */
 
 import type React from 'react'
+import type { ComponentRegistry } from './registry'
 
 /**
  * PunkNode represents a single node in the schema tree
@@ -100,7 +101,7 @@ export interface PunkRendererProps {
   actions?: ActionBus
 
   /** Component registry override */
-  registry?: ComponentMap
+  registry?: ComponentRegistry
 
   /** Error callback */
   onError?: (error: Error) => void

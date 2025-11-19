@@ -6,6 +6,9 @@
  * Prevents AI from generating raw code by providing pre-built, audited templates.
  */
 
+// Import for internal use
+import { defaultGenerator as generator } from './generator'
+
 // Core exports
 export { TemplateRegistry, defaultRegistry, ALLOWED_TEMPLATES } from './registry'
 export type {
@@ -141,7 +144,7 @@ export async function quickGenerate(
   templateName: string,
   params: unknown
 ): Promise<import('./generator').GenerateResult> {
-  return generateTemplate(templateName, params)
+  return generator.generate(templateName, params)
 }
 
 /**
