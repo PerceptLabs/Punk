@@ -8,8 +8,19 @@ A **Skill** is a portable plugin that extends Atompunk with new functionality. S
 - **Backend templates** - Server-side logic and API handlers
 - **ActionBus actions** - Event handlers and state management
 - **GlyphCase SQLite database** - Local-first data storage with reactivity
+- **Lua scripts** - Embedded runtime for reactive logic, data transforms, and business rules
 
 Skills enable modular, composable extension of Atompunk projects without modifying core code.
+
+### Why Lua?
+
+Lua provides a **safe, fast, embeddable scripting layer** for skills:
+
+- ✅ **Sandboxed** - Restricted runtime prevents malicious code
+- ✅ **Fast** - LuaJIT compilation for performance-critical logic
+- ✅ **Lightweight** - Small footprint (~200KB runtime)
+- ✅ **Reactive** - Scripts respond to Active Capsule data changes
+- ✅ **Portable** - Works across platforms without dependencies
 
 ## Skill Structure
 
@@ -24,6 +35,11 @@ skill-name/
 │   ├── api.ts
 │   ├── workers.ts
 │   └── ...
+├── scripts/               # Lua scripts (reactive logic, transforms)
+│   ├── init.lua          # Skill initialization
+│   ├── hooks.lua         # Lifecycle hooks
+│   ├── transforms.lua    # Data transformations
+│   └── reactive.lua      # Active Capsule reactions
 ├── glyphcase.db          # SQLite database with schema and Active Capsules
 ├── README.md             # Skill documentation
 └── package.json          # Dependencies (optional)
@@ -46,7 +62,13 @@ skill-name/
   "permissions": {
     "database": true,
     "network": false,
-    "filesystem": false
+    "filesystem": false,
+    "lua": {
+      "enabled": true,
+      "allowedModules": ["string", "table", "math"],
+      "maxMemory": "10MB",
+      "maxExecutionTime": "5s"
+    }
   },
   "dependencies": {
     "atompunk": "^1.0.0"
@@ -62,8 +84,9 @@ GlyphCase provides the reactive, local-first data layer for skills:
 - **Active Capsule** - Reactive data binding that automatically syncs UI updates
 - **Schema Definition** - Declarative table structures in the skill's glyphcase.db
 - **Sync Engine** - Optional backend synchronization for cloud features
+- **Lua Runtime** - Embedded scripting for reactive logic and data transforms
 
-Skills access GlyphCase through the ActionBus:
+Skills access GlyphCase through the ActionBus and Lua scripts:
 
 ```typescript
 // Query data
@@ -83,6 +106,109 @@ await ActionBus.dispatch('glyphcase:upsert', {
 ActionBus.subscribe('glyphcase:changed', (event) => {
   console.log('Data updated:', event.data);
 });
+```
+
+### Lua Scripts for Reactive Logic
+
+Skills can use Lua to respond to Active Capsule changes:
+
+**scripts/reactive.lua** - React to database changes:
+```lua
+-- Called when data changes in Active Capsule
+function on_data_changed(table_name, operation, row)
+  if table_name == "users" and operation == "INSERT" then
+    -- Send welcome email when new user created
+    local email = row.email
+    local name = row.name
+
+    glyphcase.dispatch("email:send", {
+      to = email,
+      subject = "Welcome " .. name,
+      template = "welcome"
+    })
+  end
+
+  if table_name == "orders" and row.status == "completed" then
+    -- Calculate analytics when order completes
+    local total = glyphcase.query([[
+      SELECT SUM(amount) as total
+      FROM orders
+      WHERE user_id = ?
+    ]], row.user_id)
+
+    glyphcase.update("users", row.user_id, {
+      lifetime_value = total
+    })
+  end
+end
+```
+
+**scripts/transforms.lua** - Transform data before storage:
+```lua
+-- Called before INSERT/UPDATE operations
+function before_save(table_name, data)
+  if table_name == "users" then
+    -- Auto-hash passwords
+    if data.password then
+      data.password_hash = crypto.bcrypt(data.password)
+      data.password = nil  -- Remove plaintext
+    end
+
+    -- Generate slugs
+    if data.name and not data.slug then
+      data.slug = string.lower(data.name):gsub("%s+", "-")
+    end
+  end
+
+  return data
+end
+
+-- Called after successful database operation
+function after_save(table_name, data)
+  if table_name == "posts" and data.status == "published" then
+    -- Invalidate cache
+    cache.delete("posts:latest")
+
+    -- Trigger webhook
+    webhook.send("https://api.example.com/notify", {
+      event = "post.published",
+      data = data
+    })
+  end
+end
+```
+
+**scripts/hooks.lua** - Lifecycle hooks:
+```lua
+-- Called when skill is installed
+function on_install()
+  print("Installing skill...")
+
+  -- Create default data
+  glyphcase.insert("settings", {
+    theme = "default",
+    notifications = true
+  })
+
+  -- Register ActionBus handlers
+  actionbus.register("skill:action", handle_action)
+end
+
+-- Called when skill is activated
+function on_activate()
+  print("Skill activated")
+
+  -- Start background jobs
+  scheduler.every("1h", sync_data)
+end
+
+-- Called when skill is deactivated
+function on_deactivate()
+  print("Skill deactivated")
+
+  -- Cleanup
+  scheduler.stop_all()
+end
 ```
 
 ## Installation
@@ -133,6 +259,12 @@ Skills run in isolated contexts:
 - Component code has restricted DOM access
 - Template code runs with declared permissions only
 - Database access scoped to skill namespace
+- **Lua runtime is fully sandboxed**:
+  - No access to `os`, `io`, `debug`, `package` modules by default
+  - File system access requires explicit permission
+  - Network calls only through whitelisted APIs (`glyphcase.http`)
+  - Memory and execution time limits enforced
+  - Cannot load arbitrary C libraries
 
 ### Code Signing (Optional)
 Trusted publishers can sign skills for verified installation:
@@ -202,6 +334,87 @@ CREATE TABLE events (
 );
 ```
 
+## Lua API Reference
+
+Skills have access to these Lua APIs in the sandboxed environment:
+
+### glyphcase (Database Operations)
+```lua
+-- Query
+local rows = glyphcase.query("SELECT * FROM users WHERE age > ?", 18)
+
+-- Insert
+local id = glyphcase.insert("users", { name = "Alice", age = 25 })
+
+-- Update
+glyphcase.update("users", id, { age = 26 })
+
+-- Delete
+glyphcase.delete("users", id)
+
+-- Execute raw SQL
+glyphcase.execute("CREATE INDEX idx_email ON users(email)")
+```
+
+### actionbus (Event System)
+```lua
+-- Dispatch action
+actionbus.dispatch("email:send", { to = "user@example.com" })
+
+-- Register handler
+actionbus.register("skill:custom", function(payload)
+  return { success = true }
+end)
+```
+
+### crypto (Cryptography)
+```lua
+-- Hash password
+local hash = crypto.bcrypt("password123")
+
+-- Verify
+local valid = crypto.verify("password123", hash)
+
+-- Generate UUID
+local id = crypto.uuid()
+```
+
+### http (Network - requires permission)
+```lua
+-- GET request
+local response = http.get("https://api.example.com/data")
+
+-- POST request
+local result = http.post("https://api.example.com/webhook", {
+  json = { event = "test" }
+})
+```
+
+### scheduler (Background Jobs)
+```lua
+-- Run every hour
+scheduler.every("1h", function()
+  print("Running hourly job")
+end)
+
+-- Run once after delay
+scheduler.after("5m", function()
+  print("Delayed task")
+end)
+```
+
+### cache (In-Memory Cache)
+```lua
+-- Set with TTL
+cache.set("key", "value", "10m")
+
+-- Get
+local value = cache.get("key")
+
+-- Delete
+cache.delete("key")
+```
+
 ## Best Practices
 
 1. **Namespace Everything** - Use skill ID as prefix for actions, components, tables
@@ -211,3 +424,13 @@ CREATE TABLE events (
 5. **Test Offline** - Ensure skills work without network
 6. **Version Stability** - Use semantic versioning; breaking changes increment major version
 7. **Error Handling** - Graceful degradation when permissions denied
+8. **Lua Performance**:
+   - Use LuaJIT FFI for performance-critical code
+   - Avoid string concatenation in loops (use `table.concat`)
+   - Cache function results when possible
+   - Prefer local variables over globals
+9. **Security**:
+   - Never trust user input in Lua scripts
+   - Sanitize data before SQL queries (use parameterized queries)
+   - Validate data types and ranges
+   - Use `pcall` for error handling to prevent crashes
