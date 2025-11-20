@@ -1,0 +1,34 @@
+{
+  "name": "@punk/component-code",
+  "version": "1.0.0",
+  "description": "Punk wrapper for CodeMirror code editor",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsup src/index.tsx --format cjs,esm --dts",
+    "dev": "tsup src/index.tsx --format cjs,esm --dts --watch",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "@punk/core": "workspace:*",
+    "@uiw/react-codemirror": "^4.21.21",
+    "@codemirror/lang-javascript": "^6.2.1",
+    "@codemirror/lang-python": "^6.1.3",
+    "@codemirror/lang-go": "^6.0.1",
+    "@codemirror/lang-rust": "^6.0.1",
+    "@codemirror/lang-html": "^6.4.6",
+    "@codemirror/lang-css": "^6.2.1",
+    "zod": "^3.22.4"
+  },
+  "peerDependencies": {
+    "react": "^18.2.0"
+  }
+}
