@@ -3,6 +3,7 @@
  * Centralized component registration and lookup
  */
 
+import { useState, useEffect } from 'react'
 import type { PunkComponent, ComponentMap, ComponentRegistration, ComponentMeta } from './types'
 
 /**
@@ -189,4 +190,88 @@ export function getComponent(type: string): PunkComponent | undefined {
  */
 export function hasComponent(type: string): boolean {
   return defaultRegistry.has(type)
+}
+
+/**
+ * React hook to access the component registry
+ * Provides reactive access to registered components and their metadata
+ *
+ * @param registry - Optional registry instance (defaults to defaultRegistry)
+ * @returns Object with registry methods and current state
+ *
+ * @example
+ * ```tsx
+ * function ComponentPalette() {
+ *   const { getTypes, getMeta, getByCategory } = useComponentRegistry()
+ *   const types = getTypes()
+ *   return (
+ *     <div>
+ *       {types.map(type => {
+ *         const meta = getMeta(type)
+ *         return <div key={type}>{meta?.displayName}</div>
+ *       })}
+ *     </div>
+ *   )
+ * }
+ * ```
+ */
+export function useComponentRegistry(registry: ComponentRegistry = defaultRegistry) {
+  const [, forceUpdate] = useState(0)
+
+  // Force re-render when registry changes
+  // This is a simple implementation - for production, you might want to use
+  // a more sophisticated change detection mechanism
+  useEffect(() => {
+    const interval = setInterval(() => {
+      forceUpdate((v) => v + 1)
+    }, 1000)
+    return () => clearInterval(interval)
+  }, [])
+
+  return {
+    /**
+     * Get all registered component types
+     */
+    getTypes: () => registry.getTypes(),
+
+    /**
+     * Get a component by type
+     */
+    get: (type: string) => registry.get(type),
+
+    /**
+     * Check if a component exists
+     */
+    has: (type: string) => registry.has(type),
+
+    /**
+     * Get component metadata
+     */
+    getMeta: (type: string) => registry.getMeta(type),
+
+    /**
+     * Get component schema
+     */
+    getSchema: (type: string) => registry.getSchema(type),
+
+    /**
+     * Get all metadata entries
+     */
+    getAllMeta: () => registry.getAllMeta(),
+
+    /**
+     * Get components by category
+     */
+    getByCategory: (category: string) => registry.getByCategory(category),
+
+    /**
+     * Get the registry size
+     */
+    size: () => registry.size(),
+
+    /**
+     * Access to the registry instance itself
+     */
+    registry,
+  }
 }

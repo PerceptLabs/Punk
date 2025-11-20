@@ -19,6 +19,7 @@
     "@punk/tokens": "workspace:*",
     "autoprefixer": "^10.4.16",
     "fast-json-patch": "^3.1.1",
+    "lucide-react": "^0.554.0",
     "next": "14.0.4",
     "postcss": "^8.4.32",
     "react": "^18.2.0",

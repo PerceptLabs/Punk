@@ -4,6 +4,10 @@ import { useState } from 'react'
 import { ChatPanel } from '@/components/chat-panel'
 import { PreviewPanel } from '@/components/preview-panel'
 import { SchemaInspector } from '@/components/schema-inspector'
+import { ComponentPalette } from '@/components/component-palette'
+import { CategoryTabs } from '@/components/category-tabs'
+import type { ComponentMeta } from '@punk/core'
+import { ChevronLeft, ChevronRight } from 'lucide-react'
 
 interface Message {
   role: 'user' | 'assistant'
@@ -15,6 +19,11 @@ export default function BuilderPage() {
   const [schema, setSchema] = useState<any>(null)
   const [conversation, setConversation] = useState<Message[]>([])
   const [isStreaming, setIsStreaming] = useState(false)
+
+  // Component palette state
+  const [selectedCategory, setSelectedCategory] = useState<string>('All')
+  const [isPaletteOpen, setIsPaletteOpen] = useState(true)
+  const [showBeginnerMode, setShowBeginnerMode] = useState(false)
 
   async function handleMessage(message: string) {
     // Add user message to conversation
@@ -109,16 +118,102 @@ export default function BuilderPage() {
     }
   }
 
+  // Handler for component selection from palette
+  const handleComponentSelect = (type: string, meta: ComponentMeta) => {
+    // Auto-insert into chat message (optional)
+    console.log('Component selected:', { type, meta })
+
+    // TODO: In the future, this could auto-insert a prompt into the chat
+    // or directly add the component to the schema
+  }
+
+  // Filter by beginner mode (show only simple complexity)
+  const activeComplexity = showBeginnerMode ? 'simple' : undefined
+
   return (
     <div className="flex h-screen bg-gray-50 dark:bg-gray-900">
-      {/* Chat Panel (35%) */}
-      <ChatPanel
-        onMessage={handleMessage}
-        conversation={conversation}
-        isStreaming={isStreaming}
-      />
+      {/* Component Palette Sidebar (collapsible) */}
+      <div
+        className={`
+          flex-shrink-0 border-r border-gray-200 dark:border-gray-700
+          bg-white dark:bg-gray-800 transition-all duration-300
+          ${isPaletteOpen ? 'w-80' : 'w-0'}
+        `}
+      >
+        {isPaletteOpen && (
+          <div className="flex flex-col h-full">
+            {/* Palette Header */}
+            <div className="flex-shrink-0 p-4 border-b border-gray-200 dark:border-gray-700">
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+                  Components
+                </h2>
+                <button
+                  onClick={() => setIsPaletteOpen(false)}
+                  className="p-1 rounded hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-500 dark:text-gray-400"
+                  aria-label="Close component palette"
+                >
+                  <ChevronLeft size={20} />
+                </button>
+              </div>
 
-      {/* Preview Panel (65%) */}
+              {/* Beginner/Advanced Toggle */}
+              <div className="flex items-center gap-2 mb-4">
+                <label className="flex items-center gap-2 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={showBeginnerMode}
+                    onChange={(e) => setShowBeginnerMode(e.target.checked)}
+                    className="w-4 h-4 rounded border-gray-300 dark:border-gray-600 text-blue-500 focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400"
+                  />
+                  <span className="text-sm text-gray-700 dark:text-gray-300">
+                    Beginner Mode
+                  </span>
+                </label>
+                <span className="text-xs text-gray-500 dark:text-gray-400">
+                  (Show simple components only)
+                </span>
+              </div>
+
+              {/* Category Tabs */}
+              <CategoryTabs
+                activeCategory={selectedCategory}
+                onCategoryChange={setSelectedCategory}
+              />
+            </div>
+
+            {/* Component Palette Content */}
+            <ComponentPalette
+              category={selectedCategory}
+              complexity={activeComplexity}
+              onComponentSelect={handleComponentSelect}
+              enableDrag={true}
+            />
+          </div>
+        )}
+      </div>
+
+      {/* Collapse/Expand Button (when closed) */}
+      {!isPaletteOpen && (
+        <button
+          onClick={() => setIsPaletteOpen(true)}
+          className="absolute left-0 top-1/2 -translate-y-1/2 z-10 p-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-r-md shadow-lg hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300"
+          aria-label="Open component palette"
+        >
+          <ChevronRight size={20} />
+        </button>
+      )}
+
+      {/* Chat Panel */}
+      <div className="flex-shrink-0 w-[35%]">
+        <ChatPanel
+          onMessage={handleMessage}
+          conversation={conversation}
+          isStreaming={isStreaming}
+        />
+      </div>
+
+      {/* Preview Panel */}
       <div className="flex-1 flex flex-col">
         <PreviewPanel schema={schema} />
         <SchemaInspector schema={schema} onSchemaChange={setSchema} />

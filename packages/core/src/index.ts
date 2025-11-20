@@ -32,6 +32,7 @@ export {
   registerComponent,
   getComponent,
   hasComponent,
+  useComponentRegistry,
 } from './registry'
 
 // Props processing utilities
@@ -59,4 +60,6 @@ export type {
   ValidationResult,
   ValidationError,
   ComplexityResult,
+  ComponentMeta,
+  ComponentRegistration,
 } from './types'
