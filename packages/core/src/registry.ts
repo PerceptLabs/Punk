@@ -3,24 +3,29 @@
  * Centralized component registration and lookup
  */
 
-import type { PunkComponent, ComponentMap } from './types'
+import type { PunkComponent, ComponentMap, ComponentRegistration, ComponentMeta } from './types'
 
 /**
  * ComponentRegistry manages the mapping between type strings and React components
  */
 export class ComponentRegistry {
   private components: ComponentMap
+  private metadata: Map<string, ComponentMeta>
+  private schemas: Map<string, any>
 
   constructor(initialComponents?: ComponentMap) {
     this.components = initialComponents || new Map()
+    this.metadata = new Map()
+    this.schemas = new Map()
   }
 
   /**
    * Register a component with a type name
    * @param type - Component type identifier (e.g., 'button', 'text')
    * @param component - React component to register
+   * @param registration - Optional schema and metadata
    */
-  register(type: string, component: PunkComponent): void {
+  register(type: string, component: PunkComponent, registration?: Omit<ComponentRegistration, 'component'>): void {
     if (!type || typeof type !== 'string') {
       throw new Error('Component type must be a non-empty string')
     }
@@ -30,6 +35,16 @@ export class ComponentRegistry {
     }
 
     this.components.set(type, component)
+
+    // Store metadata if provided
+    if (registration?.meta) {
+      this.metadata.set(type, registration.meta)
+    }
+
+    // Store schema if provided
+    if (registration?.schema) {
+      this.schemas.set(type, registration.schema)
+    }
   }
 
   /**
@@ -97,7 +112,47 @@ export class ComponentRegistry {
    */
   clone(): ComponentRegistry {
     const newMap = new Map(this.components)
-    return new ComponentRegistry(newMap)
+    const newRegistry = new ComponentRegistry(newMap)
+    newRegistry.metadata = new Map(this.metadata)
+    newRegistry.schemas = new Map(this.schemas)
+    return newRegistry
+  }
+
+  /**
+   * Get component metadata
+   * @param type - Component type to look up
+   * @returns Metadata if found, undefined otherwise
+   */
+  getMeta(type: string): ComponentMeta | undefined {
+    return this.metadata.get(type)
+  }
+
+  /**
+   * Get component schema
+   * @param type - Component type to look up
+   * @returns Schema if found, undefined otherwise
+   */
+  getSchema(type: string): any | undefined {
+    return this.schemas.get(type)
+  }
+
+  /**
+   * Get all metadata entries
+   * @returns Array of [type, metadata] tuples
+   */
+  getAllMeta(): Array<[string, ComponentMeta]> {
+    return Array.from(this.metadata.entries())
+  }
+
+  /**
+   * Get components by category
+   * @param category - Category to filter by
+   * @returns Array of component types in the category
+   */
+  getByCategory(category: string): string[] {
+    return Array.from(this.metadata.entries())
+      .filter(([_, meta]) => meta.category === category)
+      .map(([type, _]) => type)
   }
 }
 
@@ -110,9 +165,14 @@ export const defaultRegistry = new ComponentRegistry()
  * Helper function to register a component on the default registry
  * @param type - Component type name
  * @param component - React component
+ * @param registration - Optional schema and metadata
  */
-export function registerComponent(type: string, component: PunkComponent): void {
-  defaultRegistry.register(type, component)
+export function registerComponent(
+  type: string,
+  component: PunkComponent,
+  registration?: Omit<ComponentRegistration, 'component'>
+): void {
+  defaultRegistry.register(type, component, registration)
 }
 
 /**

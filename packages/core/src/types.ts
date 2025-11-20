@@ -160,3 +160,40 @@ export interface ComplexityResult {
     maxDepth: number
   }
 }
+
+/**
+ * Component metadata for UI builders (Mohawk) and documentation
+ */
+export interface ComponentMeta {
+  /** Display name for UI */
+  displayName: string
+
+  /** Description of the component */
+  description: string
+
+  /** Lucide icon name */
+  icon: string
+
+  /** Category for grouping (e.g., 'Layout', 'Data Visualization', 'Input') */
+  category: string
+
+  /** Tags for searchability */
+  tags: string[]
+
+  /** Complexity level */
+  complexity: 'simple' | 'medium' | 'advanced'
+}
+
+/**
+ * Component registration data including schema and metadata
+ */
+export interface ComponentRegistration {
+  /** The React component */
+  component: PunkComponent
+
+  /** Zod schema for props validation (optional) */
+  schema?: any
+
+  /** Component metadata (optional) */
+  meta?: ComponentMeta
+}
