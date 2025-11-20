@@ -13,7 +13,7 @@
 3. [Core Philosophy: Punk Pragmatism](#3-core-philosophy-punk-pragmatism)
 4. [The Three Tiers](#4-the-three-tiers)
 5. [Product 1: Punk CLI](#5-product-1-punk-cli)
-6. [Product 2: Atompunk Web Builder](#6-product-2-atompunk-web-builder)
+6. [Product 2: Mohawk](#6-product-2-atompunk-web-builder)
 7. [Colorful Terminal UI Design](#7-colorful-terminal-ui-design)
 8. [Core Technology Architecture](#8-core-technology-architecture)
 9. [GlyphCase Integration](#9-glyphcase-integration)
@@ -1975,18 +1975,18 @@ punk v1.1.0
 
 ---
 
-## 6. Product 2: Atompunk Web Builder
+## 6. Product 2: Mohawk
 
 ### 6.1 Overview
 
-Atompunk Web Builder is a **self-hostable web application** (similar to Bolt.new or Lovable.dev) that enables users to "vibe code" with AI to build full applications without sacrificing security or stability. Unlike the Punk CLI which scaffolds projects for developers to write code, Atompunk Web generates complete, working applications.
+Mohawk is a **self-hostable web application** (similar to Bolt.new or Lovable.dev) that enables users to "vibe code" with AI to build full applications without sacrificing security or stability. Unlike the Punk CLI which scaffolds projects for developers to write code, Atompunk Web generates complete, working applications.
 
 **Metaphor:** "The AI Architect with Guardrails"
 
 **Architecture:**
 ```
 ┌─────────────────────────────────────────────────────────┐
-│              Atompunk Web Builder                       │
+│              Mohawk                       │
 ├─────────────────────┬───────────────────────────────────┤
 │                     │                                   │
 │  Chat Interface     │  Live Preview                     │
@@ -2011,7 +2011,7 @@ Atompunk Web Builder is a **self-hostable web application** (similar to Bolt.new
 
 ```
 ┌────────────────────────────────────────────────────────────────┐
-│ Atompunk Builder            [New Project] [Deploy] [Settings]  │
+│ Mohawk            [New Project] [Deploy] [Settings]  │
 ├────────────────────────────────────────────────────────────────┤
 │                                                                │
 │ ┌──────────────────────┬───────────────────────────────────┐  │
@@ -2929,7 +2929,7 @@ volumes:
 #!/bin/bash
 # apps/atompunk-web/install.sh
 
-echo "Installing Atompunk Web Builder..."
+echo "Installing Mohawk..."
 
 # 1. Check prerequisites
 command -v docker >/dev/null 2>&1 || {
@@ -2974,7 +2974,7 @@ docker-compose exec backend npm run migrate
 
 # 7. Done
 echo ""
-echo "✓ Atompunk Web Builder is running!"
+echo "✓ Mohawk is running!"
 echo ""
 echo "  Frontend: http://localhost:3000"
 echo "  Backend:  http://localhost:4000"
