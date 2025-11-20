@@ -74,3 +74,14 @@ export const EXTENDED_COMPONENTS = [
 ] as const
 
 export type ExtendedComponentType = (typeof EXTENDED_COMPONENTS)[number]
+
+// Re-export schema utilities
+export {
+  buildExtendedComponentRegistry,
+  getExtendedSchemasAsJSON,
+  getComponentCategories,
+  type ExtendedComponentEntry,
+} from './schemas'
+
+// Re-export presets
+export * from './presets'

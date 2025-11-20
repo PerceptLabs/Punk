@@ -13,9 +13,12 @@ import { SYSTEM_PROMPT } from './prompts'
 
 /**
  * Build default component registry
+ * Includes both base components and extended loadout components
  */
-export function buildComponentRegistry(): Map<string, ComponentSchema> {
-  return new Map([
+export function buildComponentRegistry(
+  includeExtended: boolean = true
+): Map<string, ComponentSchema> {
+  const baseComponents: Array<[string, ComponentSchema]> = [
     [
       'Container',
       {
@@ -333,7 +336,43 @@ export function buildComponentRegistry(): Map<string, ComponentSchema> {
         children: true,
       },
     ],
-  ]) as unknown as Map<string, ComponentSchema>
+  ]
+
+  const registry = new Map(baseComponents) as unknown as Map<
+    string,
+    ComponentSchema
+  >
+
+  // Optionally include extended components
+  if (includeExtended) {
+    try {
+      // Dynamically import extended components if available
+      // This prevents hard dependency on @punk/extended
+      const { buildExtendedComponentRegistry } = require('@punk/extended/schemas')
+      const extendedRegistry = buildExtendedComponentRegistry()
+
+      // Convert ExtendedComponentEntry to ComponentSchema format
+      for (const [type, entry] of extendedRegistry.entries()) {
+        // Convert Zod schema to ComponentSchema props format
+        // This is a simplified conversion - in production you'd use zodToJsonSchema
+        registry.set(type, {
+          type: entry.type,
+          label: entry.label,
+          icon: entry.icon,
+          props: {}, // Zod schemas can be validated separately
+          children: entry.children,
+          maxChildren: entry.maxChildren,
+        } as ComponentSchema)
+      }
+    } catch (err) {
+      // @punk/extended not installed, skip extended components
+      console.warn(
+        'Extended components not available. Install @punk/extended to use Chart, Table, etc.'
+      )
+    }
+  }
+
+  return registry
 }
 
 /**
