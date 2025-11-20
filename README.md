@@ -235,6 +235,43 @@ Punk is organized into three progressive tiers:
 
 ---
 
+## Component Loadout System
+
+Punk includes an **extended component loadout** - 8 pre-wrapped component libraries ready to use:
+
+```typescript
+import '@punk/extended' // Auto-registers all components
+
+const schema = {
+  type: 'Chart',
+  props: {
+    chartType: 'bar',
+    data: salesData
+  }
+}
+```
+
+### Available Components
+
+| Component | Library | Use Case |
+|-----------|---------|----------|
+| 📊 **Chart** | Chart.js | Interactive charts (bar, line, pie, doughnut, radar) |
+| 📋 **Table** | TanStack Table | Sortable, paginated data tables |
+| 📐 **Mermaid** | Mermaid | Flowcharts and diagrams from text |
+| ✏️ **RichText** | Lexical | Rich text editing with history |
+| 💻 **Code** | CodeMirror | Syntax-highlighted code editing (7 languages) |
+| 📁 **FileDrop** | react-dropzone | Drag-and-drop file uploads |
+| 📅 **DatePicker** | react-day-picker | Date selection (single, multiple, range) |
+| ⌨️ **Command** | cmdk | Command palette for quick actions |
+
+**Learn more:** [@punk/extended documentation](packages/extended/README.md)
+
+**Examples:**
+- [Dashboard Example](examples/loadout-dashboard/README.md) - Charts, tables, and diagrams
+- [Custom Component Example](examples/custom-component/README.md) - Create your own wrappers
+
+---
+
 ## Documentation
 
 ### Getting Started
@@ -253,7 +290,9 @@ Punk is organized into three progressive tiers:
 - [Contributing](CONTRIBUTING.md) - How to contribute
 
 ### Examples
-- [Hello World](docs/examples/hello-world) - Minimal example
+- [Hello World](examples/hello-world) - Minimal example
+- [Loadout Dashboard](examples/loadout-dashboard) - Extended components showcase
+- [Custom Component](examples/custom-component) - Create custom wrappers
 - [Todo App](docs/examples/todo-app) - Classic todo with Synthpunk
 - [Dashboard](docs/examples/dashboard) - Data visualization
 - [E-commerce](docs/examples/e-commerce) - Full shopping cart
