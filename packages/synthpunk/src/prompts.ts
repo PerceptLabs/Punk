@@ -313,6 +313,30 @@ Use simpler components if needed. Prioritize:
 }
 
 /**
+ * Helper: flatten an object tree into dotted paths
+ * e.g., { user: { name: 'x', email: 'y' } } -> ["user.name", "user.email"]
+ */
+function flattenObjectPaths(
+  obj: Record<string, unknown>,
+  prefix = ''
+): string[] {
+  const result: string[] = []
+
+  for (const key of Object.keys(obj)) {
+    const value = obj[key]
+    const path = prefix ? `${prefix}.${key}` : key
+
+    if (value && typeof value === 'object' && !Array.isArray(value)) {
+      result.push(...flattenObjectPaths(value as Record<string, unknown>, path))
+    } else {
+      result.push(path)
+    }
+  }
+
+  return result
+}
+
+/**
  * Build user message with context
  */
 export function buildUserMessage(
@@ -349,6 +373,21 @@ export function buildUserMessage(
             message += ` - ${cap.description}`
           }
           message += '\n'
+        }
+      }
+
+      // List data paths (so AI knows exact bindings available)
+      if (mod.data) {
+        const paths = flattenObjectPaths(mod.data)
+        if (paths.length > 0) {
+          message += `    Data paths:\n`
+          for (const p of paths.slice(0, 15)) {
+            // Limit to 15 paths per mod to avoid token bloat
+            message += `      - {context.mods.${modName}.${p}}\n`
+          }
+          if (paths.length > 15) {
+            message += `      ... and ${paths.length - 15} more paths\n`
+          }
         }
       }
     }
