@@ -1,7 +1,7 @@
 {
   "name": "@punk/glyphcase",
   "version": "0.1.0",
-  "description": "Punk Framework skills system - SQLite database with Lua scripting",
+  "description": "Punk Framework mods system - SQLite database with Lua scripting",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",

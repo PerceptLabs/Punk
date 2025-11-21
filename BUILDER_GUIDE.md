@@ -160,7 +160,7 @@ Click **New Project**:
 Project Name: my-todo-app
 Backend: Encore.ts
 Database: PostgreSQL (Neon)
-Skills: (none for now)
+Mods: (none for now)
 ```
 
 ### 2. Describe What You Want
@@ -469,12 +469,12 @@ Invite team members:
 - Chat with teammates
 - Comment on revisions
 
-### Skills Integration
+### Mods Integration
 
-Add skills to extend functionality:
+Add mods to extend functionality:
 
 ```
-Settings → Skills → Add Skill
+Settings → Mods → Add Mod
 → Search for "supabase-backend"
 → Install
 → AI can now use Supabase features

@@ -13,7 +13,7 @@ import { SYSTEM_PROMPT } from './prompts'
 
 /**
  * Build default component registry
- * Includes both base components and extended loadout components
+ * Includes both base components and extended rig components
  */
 export function buildComponentRegistry(
   includeExtended: boolean = true

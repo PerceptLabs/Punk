@@ -1,5 +1,5 @@
 /**
- * @punk/extended - Extended Component Loadout
+ * @punk/extended - Extended Component Rig
  * Meta-package bundling all Punk component wrappers
  *
  * This package provides a curated collection of pre-wrapped React component
@@ -60,7 +60,7 @@ export const ExtendedSchemaRegistry = {
 }
 
 /**
- * List of all available component types in the extended loadout
+ * List of all available component types in the extended rig
  */
 export const EXTENDED_COMPONENTS = [
   'Chart',

@@ -1,6 +1,6 @@
 # Custom Component Example - Implementation Summary
 
-**Phase 6.2 of Punk Framework Loadout System**
+**Phase 6.2 of Punk Framework Rigs System**
 **Status:** ✅ Complete
 **Created:** 2025-11-20
 
@@ -402,7 +402,7 @@ After studying this example, developers will understand:
 
 ## Success Criteria Met
 
-From LOADOUT_IMPLEMENTATION_PLAN.md Phase 6.2:
+From RIGS_IMPLEMENTATION_PLAN.md Phase 6.2:
 
 - ✅ Create Kanban board component wrapper
 - ✅ Follow canonical pattern

@@ -15,7 +15,7 @@ var CheckCmd = &cobra.Command{
 This command checks:
   - Project structure validity
   - punk.config.ts schema validation
-  - Skill compatibility
+  - Mod compatibility
   - Backend configuration
   - Database connection (if Neon enabled)
   - Environment variables
@@ -37,7 +37,7 @@ func runChecks() {
 		{"Project structure", "success", "Valid"},
 		{"Config schema", "success", "Valid"},
 		{"Environment variables", "warning", "Missing NEON_DATABASE_URL in .env"},
-		{"Skills compatibility", "success", "All skills compatible"},
+		{"Mods compatibility", "success", "All mods compatible"},
 		{"Backend configuration", "error", "Port 4000 already in use"},
 		{"Frontend configuration", "success", "Valid"},
 	}

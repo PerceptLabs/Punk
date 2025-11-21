@@ -13,6 +13,8 @@
 3. [Reactive System](#3-reactive-system)
 4. [Database Schema](#4-database-schema)
 5. [Lua Integration](#5-lua-integration)
+   - [Trinity Runtime](#50-trinity-runtime)
+   - [Lua API Reference](#51-lua-api-reference)
 6. [Sync Protocol](#6-sync-protocol)
 7. [Performance Characteristics](#7-performance-characteristics)
 8. [Implementation Guide](#8-implementation-guide)
@@ -582,6 +584,47 @@ const db = new GlyphCase({
 
 ## 5. Lua Integration
 
+### 5.0 Trinity Runtime
+
+GlyphCase Mods execute in the **Trinity Runtime**, a polyglot execution environment:
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                      TRINITY RUNTIME                         │
+├─────────────────────────────────────────────────────────────┤
+│  Lua (Brain)      │ Scripting, logic orchestration          │
+│  Txiki.js (Hands) │ I/O, networking, async operations       │
+│  WAMR (Muscle)    │ WebAssembly for performance-critical    │
+└─────────────────────────────────────────────────────────────┘
+```
+
+**How it works:**
+- **Lua** serves as the orchestration layer - simple, readable scripts that coordinate work
+- **Txiki.js** handles all I/O: file operations, HTTP requests, timers, async operations
+- **WAMR** (WebAssembly Micro Runtime) executes compiled WebAssembly modules for compute-heavy tasks
+
+**Example: Using all three runtimes:**
+
+```lua
+-- Lua orchestrates
+function process_large_dataset(url)
+  -- Txiki.js fetches data (async I/O)
+  local data = txiki.fetch(url)
+
+  -- WAMR processes it (performance)
+  local result = wamr.execute("data_transform", data)
+
+  -- Lua handles the result
+  for _, item in ipairs(result) do
+    glyphcase.insert("processed_items", item)
+  end
+
+  return #result
+end
+```
+
+Mods can use any combination of these runtimes based on their needs. Simple mods may only use Lua, while performance-critical mods can leverage WAMR for heavy lifting.
+
 ### 5.1 Lua API Reference
 
 GlyphCase provides a sandboxed Lua environment with specific APIs:
@@ -753,39 +796,39 @@ end
 
 #### on_install()
 
-Called when skill is installed:
+Called when mod is installed:
 
 ```lua
 function on_install()
-  print("Installing skill...")
+  print("Installing mod...")
 
   -- Create default data
   glyphcase.insert("settings", {
-    key = "skill_installed",
+    key = "mod_installed",
     value = "true",
     created_at = os.time()
   })
 
   -- Initialize schema
   glyphcase.execute([[
-    CREATE TABLE IF NOT EXISTS skill_data (
+    CREATE TABLE IF NOT EXISTS mod_data (
       id INTEGER PRIMARY KEY,
       key TEXT UNIQUE,
       value JSON
     )
   ]])
 
-  print("Skill installed successfully")
+  print("Mod installed successfully")
 end
 ```
 
 #### on_activate()
 
-Called when skill is activated:
+Called when mod is activated:
 
 ```lua
 function on_activate()
-  print("Activating skill...")
+  print("Activating mod...")
 
   -- Start watchers
   glyphcase.watch("users", handle_user_changes)
@@ -793,23 +836,23 @@ function on_activate()
   -- Schedule tasks
   scheduler.every("1h", sync_external_data)
 
-  print("Skill activated")
+  print("Mod activated")
 end
 ```
 
 #### on_deactivate()
 
-Called when skill is deactivated:
+Called when mod is deactivated:
 
 ```lua
 function on_deactivate()
-  print("Deactivating skill...")
+  print("Deactivating mod...")
 
   -- Clean up
   scheduler.stop_all()
   glyphcase.unwatch_all()
 
-  print("Skill deactivated")
+  print("Mod deactivated")
 end
 ```
 
@@ -1696,13 +1739,13 @@ The system is designed to be:
 - **Scalable** - batching and indexing for performance
 - **Simple** - straightforward API for developers
 
-See [GLYPHCASE_SKILLS_SPEC.md](GLYPHCASE_SKILLS_SPEC.md) for how to use Active Capsule in Skills, or [BACKEND_GUIDE.md](BACKEND_GUIDE.md) for GlyphCase backend setup.
+See [GLYPHCASE_SKILLS_SPEC.md](GLYPHCASE_SKILLS_SPEC.md) for how to use Active Capsule in Mods, or [BACKEND_GUIDE.md](BACKEND_GUIDE.md) for GlyphCase backend setup.
 
 ---
 
 **References:**
 - [Punk Framework Documentation](README.md)
 - [Architecture Guide](ARCHITECTURE.md)
-- [Skills Specification](GLYPHCASE_SKILLS_SPEC.md)
+- [Mods Specification](GLYPHCASE_SKILLS_SPEC.md)
 - [Backend Guide](BACKEND_GUIDE.md)
 - [Philosophy](PHILOSOPHY.md)

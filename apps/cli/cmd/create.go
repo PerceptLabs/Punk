@@ -19,7 +19,7 @@ The wizard will guide you through:
   - Tier selection (punk, synthpunk, atompunk)
   - Backend selection (encore, trpc, etc.)
   - Neon database integration
-  - Skills selection
+  - Mods selection
   - Git initialization`,
 	Run: func(cmd *cobra.Command, args []string) {
 		// Launch interactive TUI wizard

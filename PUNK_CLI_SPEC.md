@@ -19,7 +19,7 @@ Interactive wizard for scaffold new Punk projects with guided selections.
 2. Tier selection (single choice)
 3. Backend selection (single choice)
 4. Neon integration (yes/no)
-5. Skills selection (multi-select)
+5. Mods selection (multi-select)
 6. Git initialization (yes/no)
 7. Project generation and folder creation
 
@@ -94,15 +94,15 @@ Multi-pane TUI dashboard showing logs and status of running services.
 
 ### `punk add`
 
-Add components or skills to existing project.
+Add components or mods to existing project.
 
 **Usage:**
 ```bash
-punk add [component|skill]
+punk add [component|mod]
 ```
 
 **Interactive Selection:**
-- List available components/skills with descriptions
+- List available components/mods with descriptions
 - Filter/search by name
 - Show dependencies
 - Confirm before adding
@@ -116,7 +116,7 @@ Validate project configuration and schemas.
 **Checks:**
 - Project structure validity
 - `punk.config.ts` schema validation
-- Skill compatibility
+- Mod compatibility
 - Backend configuration
 - Database connection (if Neon enabled)
 - Environment variables
@@ -129,7 +129,7 @@ Validate project configuration and schemas.
 │ ✓ Project structure valid                        │
 │ ✓ Config schema valid                            │
 │ ⚠ Missing NEON_DATABASE_URL in .env              │
-│ ✓ Skills compatible                              │
+│ ✓ Mods compatible                              │
 │ ✗ Backend port 4000 already in use               │
 │                                                  │
 │ Result: 1 warning, 1 error                       │
@@ -248,7 +248,7 @@ punk-cli/
 Templates are resolved based on selections:
 
 ```
-tier + backend + skills = final_template
+tier + backend + mods = final_template
 ```
 
 **Template Structure:**
@@ -264,12 +264,12 @@ assets/templates/
 │   │   └── .env.example
 │   ├── punk.config.ts
 │   └── .gitignore
-├── skills/
+├── mods/
 │   ├── auth/
 │   │   ├── auth.ts
 │   │   └── integration.md
 │   ├── ui/
-│   └── ... (other skills)
+│   └── ... (other mods)
 └── .punk-meta.json          # Metadata for validation
 ```
 
@@ -277,7 +277,7 @@ assets/templates/
 
 1. **Load base template** for selected tier
 2. **Apply backend template** overlays
-3. **Inject skill files** and configuration patches
+3. **Inject mod files** and configuration patches
 4. **Substitute variables** (project name, ports, etc.)
 5. **Initialize git** if requested
 6. **Output summary** with next steps
@@ -365,7 +365,7 @@ punk --help
 - Deploy command with cloud provider integration
 - Interactive debugger with breakpoints
 - Real-time error overlays in dev mode
-- Plugin system for custom skills
+- Plugin system for custom mods
 - Terminal theme customization
 - Dark/light mode auto-detection
 

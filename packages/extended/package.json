@@ -1,12 +1,12 @@
 {
   "name": "@punk/extended",
   "version": "1.0.0",
-  "description": "Extended component loadout for Punk Framework - curated collection of component wrappers",
+  "description": "Extended component rig for Punk Framework - curated collection of component wrappers",
   "keywords": [
     "punk",
     "framework",
     "components",
-    "loadout",
+    "rig",
     "ui",
     "react"
   ],

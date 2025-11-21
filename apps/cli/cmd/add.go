@@ -11,25 +11,25 @@ import (
 )
 
 var AddCmd = &cobra.Command{
-	Use:   "add [component|skill]",
-	Short: "Add components, backends, or skills",
-	Long: `Add new components, backends, or skills to your existing Punk project.
+	Use:   "add [component|mod]",
+	Short: "Add components, backends, or mods",
+	Long: `Add new components, backends, or mods to your existing Punk project.
 
 Available subcommands:
-  punk add skill [name]    - Add a GlyphCase skill
+  punk add mod [name]      - Add a GlyphCase mod
   punk add component       - Add a UI component
   punk add backend         - Add or change backend`,
 }
 
-var addSkillCmd = &cobra.Command{
-	Use:   "skill [name]",
-	Short: "Add a GlyphCase skill to your project",
+var addModCmd = &cobra.Command{
+	Use:   "mod [name]",
+	Short: "Add a GlyphCase mod to your project",
 	Run: func(cmd *cobra.Command, args []string) {
 		if len(args) > 0 {
-			installSkill(args[0])
+			installMod(args[0])
 		} else {
-			// Launch interactive skill browser
-			p := tea.NewProgram(newSkillBrowser())
+			// Launch interactive mod browser
+			p := tea.NewProgram(newModBrowser())
 			if _, err := p.Run(); err != nil {
 				fmt.Printf("Error: %v", err)
 			}
@@ -38,49 +38,49 @@ var addSkillCmd = &cobra.Command{
 }
 
 func init() {
-	AddCmd.AddCommand(addSkillCmd)
+	AddCmd.AddCommand(addModCmd)
 }
 
-type skillItem struct {
+type modItem struct {
 	name string
 	desc string
 }
 
-func (i skillItem) Title() string       { return i.name }
-func (i skillItem) Description() string { return i.desc }
-func (i skillItem) FilterValue() string { return i.name }
+func (i modItem) Title() string       { return i.name }
+func (i modItem) Description() string { return i.desc }
+func (i modItem) FilterValue() string { return i.name }
 
-type skillBrowserModel struct {
+type modBrowserModel struct {
 	list list.Model
 }
 
-func newSkillBrowser() skillBrowserModel {
+func newModBrowser() modBrowserModel {
 	items := []list.Item{
-		skillItem{name: "auth", desc: "Authentication & authorization"},
-		skillItem{name: "ui", desc: "UI component library"},
-		skillItem{name: "db", desc: "Database utilities"},
-		skillItem{name: "api", desc: "API client generation"},
-		skillItem{name: "storage", desc: "File storage"},
-		skillItem{name: "search", desc: "Full-text search"},
-		skillItem{name: "cache", desc: "Caching layer"},
-		skillItem{name: "queue", desc: "Job queue"},
+		modItem{name: "auth", desc: "Authentication & authorization"},
+		modItem{name: "ui", desc: "UI component library"},
+		modItem{name: "db", desc: "Database utilities"},
+		modItem{name: "api", desc: "API client generation"},
+		modItem{name: "storage", desc: "File storage"},
+		modItem{name: "search", desc: "Full-text search"},
+		modItem{name: "cache", desc: "Caching layer"},
+		modItem{name: "queue", desc: "Job queue"},
 	}
 
 	l := list.New(items, list.NewDefaultDelegate(), 0, 0)
-	l.Title = "Available Skills"
+	l.Title = "Available Mods"
 	l.Styles.Title = lipgloss.NewStyle().
 		Foreground(styles.Pink).
 		Bold(true).
 		Padding(0, 1)
 
-	return skillBrowserModel{list: l}
+	return modBrowserModel{list: l}
 }
 
-func (m skillBrowserModel) Init() tea.Cmd {
+func (m modBrowserModel) Init() tea.Cmd {
 	return nil
 }
 
-func (m skillBrowserModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
+func (m modBrowserModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case tea.WindowSizeMsg:
 		m.list.SetSize(msg.Width, msg.Height)
@@ -91,8 +91,8 @@ func (m skillBrowserModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			return m, tea.Quit
 		}
 		if msg.String() == "enter" {
-			if i, ok := m.list.SelectedItem().(skillItem); ok {
-				installSkill(i.name)
+			if i, ok := m.list.SelectedItem().(modItem); ok {
+				installMod(i.name)
 			}
 			return m, tea.Quit
 		}
@@ -103,18 +103,18 @@ func (m skillBrowserModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	return m, cmd
 }
 
-func (m skillBrowserModel) View() string {
+func (m modBrowserModel) View() string {
 	return lipgloss.NewStyle().Padding(1).Render(m.list.View())
 }
 
-func installSkill(name string) {
-	fmt.Println(styles.Title.Render(fmt.Sprintf("Installing skill: %s", name)))
+func installMod(name string) {
+	fmt.Println(styles.Title.Render(fmt.Sprintf("Installing mod: %s", name)))
 	fmt.Println()
-	fmt.Println(styles.StatusIcon("running") + " Downloading skill...")
+	fmt.Println(styles.StatusIcon("running") + " Downloading mod...")
 	fmt.Println(styles.StatusIcon("running") + " Installing dependencies...")
-	fmt.Println(styles.StatusIcon("running") + " Configuring skill...")
+	fmt.Println(styles.StatusIcon("running") + " Configuring mod...")
 	fmt.Println()
-	fmt.Println(styles.Success.Render("✅ Skill installed successfully!"))
+	fmt.Println(styles.Success.Render("Mod installed successfully!"))
 	fmt.Println()
 	fmt.Println(styles.Muted.Render("Run 'punk dev' to see your changes"))
 }

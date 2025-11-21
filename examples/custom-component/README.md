@@ -410,7 +410,7 @@ custom-component/
 
 - **Pattern Guide:** See `PATTERN_GUIDE.md` for detailed documentation
 - **Core Docs:** See `/packages/core/README.md`
-- **Implementation Plan:** See `/LOADOUT_IMPLEMENTATION_PLAN.md`
+- **Implementation Plan:** See `/RIGS_IMPLEMENTATION_PLAN.md`
 - **Zod Docs:** https://zod.dev
 - **@hello-pangea/dnd Docs:** https://github.com/hello-pangea/dnd
 

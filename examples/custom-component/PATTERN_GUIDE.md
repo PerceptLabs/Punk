@@ -719,7 +719,7 @@ it('has no accessibility violations', async () => {
 - **Zod Documentation:** https://zod.dev
 - **Punk Core API:** `/packages/core/README.md`
 - **Lucide Icons:** https://lucide.dev
-- **Implementation Plan:** `/LOADOUT_IMPLEMENTATION_PLAN.md`
+- **Implementation Plan:** `/RIGS_IMPLEMENTATION_PLAN.md`
 - **Example Code:** `/examples/custom-component/src/kanban-wrapper.tsx`
 
 ---

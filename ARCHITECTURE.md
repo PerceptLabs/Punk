@@ -17,9 +17,11 @@ Complete technical architecture of the Punk Framework.
 9. [AI Integration (Epoch)](#ai-integration-epoch)
 10. [CLI Architecture](#cli-architecture)
 11. [Web Builder Architecture](#web-builder-architecture)
-12. [Skill System](#skill-system)
-13. [Security Model](#security-model)
-14. [Performance Considerations](#performance-considerations)
+12. [Mod System](#mod-system)
+13. [Trinity Runtime](#trinity-runtime)
+14. [Depot](#depot)
+15. [Security Model](#security-model)
+16. [Performance Considerations](#performance-considerations)
 
 ---
 
@@ -34,7 +36,7 @@ The Punk Framework is built on a **layered architecture** that separates concern
 3. **Validated:** All data flows through Zod validation
 4. **Type-Safe:** Full TypeScript coverage
 5. **Accessible:** WCAG 2.1 AA compliance built-in
-6. **Extensible:** Plugin architecture via Skills
+6. **Extensible:** Plugin architecture via Mods
 
 ### High-Level Architecture
 
@@ -923,7 +925,7 @@ tools/cli/
 │   ├── add.go
 │   ├── upgrade.go
 │   ├── theme.go
-│   └── skills.go
+│   └── mods.go
 ├── ui/                       # UI components
 │   ├── banner.go
 │   ├── picker.go
@@ -933,7 +935,7 @@ tools/cli/
 │   ├── composer.go
 │   ├── template.go
 │   └── merger.go
-└── skills/                   # Skill management
+└── mods/                   # Mod management
     ├── manager.go
     ├── installer.go
     └── registry.go
@@ -968,7 +970,7 @@ backends/
 ├── glyphcase/
 └── manifest/
 
-skills/              ← GlyphCase files
+mods/              ← GlyphCase files
 ├── shadcn-components.gcasex
 ├── supabase-backend.gcasex
 └── ...
@@ -1024,15 +1026,121 @@ apps/atompunk-web/
 
 ---
 
-## Skill System
+## Mod System
 
-Skills are **portable plugins** packaged as GlyphCase (.gcasex) files containing:
+Mods are **portable plugins** packaged as GlyphCase (.gcasex) files containing:
 - TCMR scripts (sandboxed JavaScript)
 - Knowledge base (JSON)
 - Templates
 - Dependencies
 
 See [SKILLS_GUIDE.md](SKILLS_GUIDE.md) for complete documentation.
+
+---
+
+## Trinity Runtime
+
+Mods execute in the **Trinity Runtime**, a polyglot execution environment designed for maximum flexibility and performance:
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                      TRINITY RUNTIME                         │
+│                                                             │
+│  ┌──────────────────┐  ┌──────────────────┐  ┌────────────┐│
+│  │      Lua         │  │    Txiki.js      │  │    WAMR    ││
+│  │    (Brain)       │  │    (Hands)       │  │  (Muscle)  ││
+│  │                  │  │                  │  │            ││
+│  │ • Scripting      │  │ • I/O operations │  │ • WebAssembly│
+│  │ • Logic flow     │  │ • Networking     │  │ • Performance│
+│  │ • Orchestration  │  │ • Async ops      │  │ • Native code│
+│  └──────────────────┘  └──────────────────┘  └────────────┘│
+│                                                             │
+└─────────────────────────────────────────────────────────────┘
+```
+
+### Components
+
+| Component | Role | Use Case |
+|-----------|------|----------|
+| **Lua** | Brain | Scripting, logic orchestration, glue code |
+| **Txiki.js** | Hands | I/O operations, networking, async tasks |
+| **WAMR** | Muscle | WebAssembly Micro Runtime for performance-critical code |
+
+### How Mods Use Trinity Runtime
+
+Mods can leverage any combination of these runtimes:
+
+```lua
+-- Lua orchestrates the flow
+function process_data(input)
+  -- Use Txiki.js for I/O
+  local data = txiki.fetch("https://api.example.com/data")
+
+  -- Use WAMR for heavy computation
+  local result = wamr.execute("transform", data)
+
+  return result
+end
+```
+
+**Benefits:**
+- **Flexibility** - Choose the right tool for each task
+- **Performance** - WAMR for compute-intensive operations
+- **Simplicity** - Lua for readable orchestration logic
+- **Capability** - Txiki.js for modern async I/O
+
+---
+
+## Depot
+
+The **Depot** is the marketplace for sharing and discovering extensions:
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                         DEPOT                                │
+│              https://depot.punk.dev                          │
+│                                                             │
+│  ┌─────────────────────────┐  ┌─────────────────────────┐  │
+│  │         RIGS            │  │         MODS            │  │
+│  │   UI Component Sets     │  │    Logic Bundles        │  │
+│  │                         │  │                         │  │
+│  │ • Theme packs           │  │ • Data processors       │  │
+│  │ • Component libraries   │  │ • API integrations      │  │
+│  │ • Layout templates      │  │ • Automation scripts    │  │
+│  │ • Design systems        │  │ • Business logic        │  │
+│  └─────────────────────────┘  └─────────────────────────┘  │
+│                                                             │
+└─────────────────────────────────────────────────────────────┘
+```
+
+### Rigs
+
+**Rigs** are UI component collections:
+- Pre-built component sets
+- Theme packages
+- Layout templates
+- Design system implementations
+
+### Mods
+
+**Mods** are logic and capability bundles that run in the Trinity Runtime:
+- Data transformation scripts
+- API integrations
+- Automation workflows
+- Business logic modules
+
+### Installing from Depot
+
+```bash
+# Install a Rig (UI components)
+punk add rig synthwave-theme
+
+# Install a Mod (logic bundle)
+punk add mod stripe-payments
+
+# Browse available packages
+punk depot search charts
+```
 
 ---
 
@@ -1055,12 +1163,12 @@ See [SKILLS_GUIDE.md](SKILLS_GUIDE.md) for complete documentation.
 5. **Rate limiting:** Automatic rate limiting on endpoints
 6. **Auth required:** Authentication enforced by default
 
-### Skill Security
+### Mod Security
 
 1. **Sandboxed execution:** TCMR scripts run in isolated context
-2. **Permission system:** Skills declare required permissions
+2. **Permission system:** Mods declare required permissions
 3. **Checksum verification:** .gcasex files verified before installation
-4. **Code review:** Community skills reviewed before marketplace listing
+4. **Code review:** Community mods reviewed before marketplace listing
 
 ---
 
@@ -1118,4 +1226,4 @@ See [SKILLS_GUIDE.md](SKILLS_GUIDE.md) for complete documentation.
 For more details, see:
 - [Component Reference](COMPONENT_REFERENCE.md)
 - [Backend Guide](BACKEND_GUIDE.md)
-- [Skills Guide](SKILLS_GUIDE.md)
+- [Mods Guide](SKILLS_GUIDE.md)

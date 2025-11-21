@@ -7,7 +7,7 @@
 export { ActiveCapsule } from './capsule';
 export { EventBus } from './events';
 export { LuaRuntime } from './lua';
-export { SkillManager } from './skill';
+export { ModManager } from './mod';
 export { SyncEngine } from './sync';
 export { createLuaBindings } from './bindings';
 export { configureLogging, createLogger, loggers, redact } from './logger';
@@ -29,12 +29,12 @@ export type {
   LuaSandbox,
   LuaConfig,
 
-  // Skill types
-  Skill,
-  SkillManifest,
-  SkillComponent,
-  SkillTemplate,
-  SkillHook,
+  // Mod types
+  Mod,
+  ModManifest,
+  ModComponent,
+  ModTemplate,
+  ModHook,
 
   // Sync types
   SyncConfig,
@@ -56,7 +56,7 @@ export type {
 import { ActiveCapsule } from './capsule';
 import { EventBus } from './events';
 import { LuaRuntime } from './lua';
-import { SkillManager } from './skill';
+import { ModManager } from './mod';
 import { SyncEngine } from './sync';
 import type { GlyphCaseConfig, TableDef } from './types';
 
@@ -64,7 +64,7 @@ export class GlyphCase {
   private capsule: ActiveCapsule;
   private eventBus: EventBus;
   private luaRuntime?: LuaRuntime;
-  private skillManager: SkillManager;
+  private modManager: ModManager;
   private syncEngine?: SyncEngine;
 
   constructor(config: GlyphCaseConfig) {
@@ -74,8 +74,8 @@ export class GlyphCase {
     // Initialize Active Capsule
     this.capsule = new ActiveCapsule(config.dbPath, config);
 
-    // Initialize skill manager
-    this.skillManager = new SkillManager(this.capsule, this.eventBus);
+    // Initialize mod manager
+    this.modManager = new ModManager(this.capsule, this.eventBus);
 
     // Initialize Lua runtime if configured
     if (config.lua) {
@@ -177,24 +177,24 @@ export class GlyphCase {
   }
 
   /**
-   * Load skill
+   * Load mod
    */
-  async loadSkill(skillPath: string) {
-    return await this.skillManager.loadSkill(skillPath);
+  async loadMod(modPath: string) {
+    return await this.modManager.loadMod(modPath);
   }
 
   /**
-   * Activate skill
+   * Activate mod
    */
-  async activateSkill(skillId: string) {
-    return await this.skillManager.activateSkill(skillId);
+  async activateMod(modId: string) {
+    return await this.modManager.activateMod(modId);
   }
 
   /**
-   * Deactivate skill
+   * Deactivate mod
    */
-  async deactivateSkill(skillId: string) {
-    return await this.skillManager.deactivateSkill(skillId);
+  async deactivateMod(modId: string) {
+    return await this.modManager.deactivateMod(modId);
   }
 
   /**
@@ -230,10 +230,10 @@ export class GlyphCase {
   }
 
   /**
-   * Get skill manager
+   * Get mod manager
    */
-  getSkillManager(): SkillManager {
-    return this.skillManager;
+  getModManager(): ModManager {
+    return this.modManager;
   }
 
   /**

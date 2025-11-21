@@ -348,7 +348,7 @@ SynthPunk integrates with:
 
 - **@punk/puck** - Renders generated schemas as React UIs
 - **@punk/pink** - Consumes design tokens from token registry
-- **@punk/glyphcase** - Can be wrapped as a skill for schema generation
+- **@punk/glyphcase** - Can be wrapped as a mod for schema generation
 - **@punk/mohawk** - Visual builder can use Epoch for AI-assisted design
 
 ## Summary

@@ -12,9 +12,9 @@ import {
 } from './data'
 
 /**
- * Punk Loadout Dashboard Example Application
+ * Punk Rigs Dashboard Example Application
  *
- * This app demonstrates the @punk/extended loadout by showcasing:
+ * This app demonstrates the @punk/extended rig by showcasing:
  * 1. Multiple chart types (bar, line, pie) using @punk/component-chart
  * 2. Interactive data table with sorting and pagination using @punk/component-table
  * 3. System diagrams using @punk/component-mermaid

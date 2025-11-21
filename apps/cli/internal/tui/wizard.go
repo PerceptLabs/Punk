@@ -17,7 +17,7 @@ const (
 	StepTier
 	StepBackend
 	StepNeon
-	StepSkills
+	StepMods
 	StepGit
 	StepConfirm
 	StepGenerate
@@ -30,7 +30,7 @@ type WizardModel struct {
 	tier        string
 	backend     string
 	useNeon     bool
-	skills      []string
+	mods        []string
 	initGit     bool
 	cursor      int
 	textInput   textinput.Model
@@ -53,7 +53,7 @@ func NewWizard() WizardModel {
 		backend:     "none",
 		useNeon:     false,
 		initGit:     true,
-		skills:      []string{},
+		mods:        []string{},
 	}
 }
 
@@ -92,8 +92,8 @@ func (m WizardModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 		case " ":
 			// Space to toggle selections
-			if m.currentStep == StepSkills {
-				m.toggleSkill()
+			if m.currentStep == StepMods {
+				m.toggleMod()
 			}
 
 		case "backspace":
@@ -142,10 +142,10 @@ func (m WizardModel) handleEnter() (tea.Model, tea.Cmd) {
 
 	case StepNeon:
 		m.useNeon = m.cursor == 0
-		m.currentStep = StepSkills
+		m.currentStep = StepMods
 		m.cursor = 0
 
-	case StepSkills:
+	case StepMods:
 		m.currentStep = StepGit
 		m.cursor = 1 // Default to "yes"
 
@@ -168,21 +168,21 @@ func (m WizardModel) handleEnter() (tea.Model, tea.Cmd) {
 	return m, nil
 }
 
-func (m *WizardModel) toggleSkill() {
-	availableSkills := []string{"auth", "ui", "db", "api", "storage"}
-	if m.cursor < len(availableSkills) {
-		skill := availableSkills[m.cursor]
-		// Toggle skill in/out of selection
+func (m *WizardModel) toggleMod() {
+	availableMods := []string{"auth", "ui", "db", "api", "storage"}
+	if m.cursor < len(availableMods) {
+		mod := availableMods[m.cursor]
+		// Toggle mod in/out of selection
 		found := false
-		for i, s := range m.skills {
-			if s == skill {
-				m.skills = append(m.skills[:i], m.skills[i+1:]...)
+		for i, s := range m.mods {
+			if s == mod {
+				m.mods = append(m.mods[:i], m.mods[i+1:]...)
 				found = true
 				break
 			}
 		}
 		if !found {
-			m.skills = append(m.skills, skill)
+			m.mods = append(m.mods, mod)
 		}
 	}
 }
@@ -216,8 +216,8 @@ func (m WizardModel) View() string {
 		content += m.viewBackendSelection()
 	case StepNeon:
 		content += m.viewNeonSelection()
-	case StepSkills:
-		content += m.viewSkillsSelection()
+	case StepMods:
+		content += m.viewModsSelection()
 	case StepGit:
 		content += m.viewGitSelection()
 	case StepConfirm:
@@ -287,7 +287,7 @@ func (m WizardModel) viewBackendSelection() string {
 		{"encore", "Encore (Go)"},
 		{"trpc", "tRPC (TypeScript)"},
 		{"encore-ts", "Encore.ts (TypeScript)"},
-		{"glyphcase", "GlyphCase (Lua skills)"},
+		{"glyphcase", "GlyphCase (Lua mods)"},
 	}
 
 	var options string
@@ -326,10 +326,10 @@ func (m WizardModel) viewNeonSelection() string {
 	return title + "\n\n" + opts + help
 }
 
-func (m WizardModel) viewSkillsSelection() string {
-	title := styles.Title.Render("Select Skills (space to toggle)")
+func (m WizardModel) viewModsSelection() string {
+	title := styles.Title.Render("Select Mods (space to toggle)")
 
-	skills := []struct {
+	mods := []struct {
 		name string
 		desc string
 	}{
@@ -341,14 +341,14 @@ func (m WizardModel) viewSkillsSelection() string {
 	}
 
 	var options string
-	for i, skill := range skills {
+	for i, mod := range mods {
 		cursor := " "
 		selected := ""
 
-		// Check if skill is selected
+		// Check if mod is selected
 		isSelected := false
-		for _, s := range m.skills {
-			if s == skill.name {
+		for _, s := range m.mods {
+			if s == mod.name {
 				isSelected = true
 				selected = "✓"
 				break
@@ -364,8 +364,8 @@ func (m WizardModel) viewSkillsSelection() string {
 			checkBox = "[" + styles.Success.Render(selected) + "]"
 		}
 
-		line := cursor + " " + checkBox + " " + skill.name + " " +
-			styles.Muted.Render("("+skill.desc+")")
+		line := cursor + " " + checkBox + " " + mod.name + " " +
+			styles.Muted.Render("("+mod.desc+")")
 
 		if i == m.cursor {
 			options += styles.Selected.Render(line) + "\n"
@@ -412,7 +412,7 @@ func (m WizardModel) viewConfirmation() string {
 		styles.Label.Render("Tier:"), styles.Value.Render(m.tier),
 		styles.Label.Render("Backend:"), styles.Value.Render(m.backend),
 		styles.Label.Render("Neon DB:"), styles.Value.Render(fmt.Sprintf("%v", m.useNeon)),
-		styles.Label.Render("Skills:"), styles.Value.Render(strings.Join(m.skills, ", ")),
+		styles.Label.Render("Mods:"), styles.Value.Render(strings.Join(m.mods, ", ")),
 		styles.Label.Render("Init Git:"), styles.Value.Render(fmt.Sprintf("%v", m.initGit)),
 	)
 
@@ -438,7 +438,7 @@ func (m WizardModel) viewGenerating() string {
 		"Creating directory structure",
 		"Installing dependencies",
 		"Configuring backend",
-		"Setting up skills",
+		"Setting up mods",
 		"Initializing git",
 	}
 

@@ -1,5 +1,5 @@
 --[[
-  Example GlyphCase Skill
+  Example GlyphCase Mod
   Demonstrates all Lua features and reactive capabilities
 ]]--
 
@@ -8,34 +8,34 @@
 -- ============================================================================
 
 function on_install()
-  print("Installing Example Skill...")
+  print("Installing Example Mod...")
 
   -- Create initial data
   glyphcase.transaction(function()
     glyphcase.execute([[
-      CREATE TABLE IF NOT EXISTS skill_settings (
+      CREATE TABLE IF NOT EXISTS mod_settings (
         id INTEGER PRIMARY KEY,
         key TEXT UNIQUE NOT NULL,
         value TEXT NOT NULL
       )
     ]])
 
-    glyphcase.insert("skill_settings", {
+    glyphcase.insert("mod_settings", {
       key = "version",
       value = "1.0.0"
     })
 
-    glyphcase.insert("skill_settings", {
+    glyphcase.insert("mod_settings", {
       key = "installed_at",
       value = tostring(os.time())
     })
   end)
 
-  print("✓ Skill installed successfully")
+  print("Mod installed successfully")
 end
 
 function on_activate()
-  print("Activating Example Skill...")
+  print("Activating Example Mod...")
 
   -- Set up watchers
   setup_watchers()
@@ -46,11 +46,11 @@ function on_activate()
   -- Register event handlers
   setup_event_handlers()
 
-  print("✓ Skill activated")
+  print("Mod activated")
 end
 
 function on_deactivate()
-  print("Deactivating Example Skill...")
+  print("Deactivating Example Mod...")
 
   -- Stop all scheduled tasks
   scheduler.stop_all()
@@ -58,7 +58,7 @@ function on_deactivate()
   -- Clear cache
   cache.clear()
 
-  print("✓ Skill deactivated")
+  print("Mod deactivated")
 end
 
 -- ============================================================================
@@ -442,7 +442,7 @@ end
 -- Initialization
 -- ============================================================================
 
-print("Example Skill loaded successfully")
+print("Example Mod loaded successfully")
 
 -- Export public API
 return {

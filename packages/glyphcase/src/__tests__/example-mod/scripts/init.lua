@@ -1,9 +1,9 @@
--- Example Skill Initialization Script
+-- Example Mod Initialization Script
 
-print("Initializing Example Skill...")
+print("Initializing Example Mod...")
 
 -- Global state
-_G.skill_state = {
+_G.mod_state = {
   activated = false,
   event_count = 0
 }
@@ -11,25 +11,25 @@ _G.skill_state = {
 -- Lifecycle Hooks
 
 function on_install()
-  print("Installing Example Skill...")
+  print("Installing Example Mod...")
 
   -- Create default data
   glyphcase.insert("settings", {
-    key = "example_skill_installed",
+    key = "example_mod_installed",
     value = "true"
   })
 
-  print("Example Skill installed successfully")
+  print("Example Mod installed successfully")
 end
 
 function on_activate()
-  print("Activating Example Skill...")
+  print("Activating Example Mod...")
 
-  _G.skill_state.activated = true
+  _G.mod_state.activated = true
 
   -- Watch for user changes
   glyphcase.watch("users", function(events)
-    _G.skill_state.event_count = _G.skill_state.event_count + #events
+    _G.mod_state.event_count = _G.mod_state.event_count + #events
 
     for _, event in ipairs(events) do
       if event.operation == "INSERT" then
@@ -44,15 +44,15 @@ function on_activate()
     end
   end)
 
-  print("Example Skill activated")
+  print("Example Mod activated")
 end
 
 function on_deactivate()
-  print("Deactivating Example Skill...")
+  print("Deactivating Example Mod...")
 
-  _G.skill_state.activated = false
+  _G.mod_state.activated = false
 
-  print("Example Skill deactivated")
+  print("Example Mod deactivated")
 end
 
 -- Data transformation hooks
@@ -68,7 +68,7 @@ function before_save(table_name, data)
   return data
 end
 
--- Custom skill functions
+-- Custom mod functions
 
 function process_users()
   local users = glyphcase.query("SELECT * FROM users")
@@ -90,4 +90,4 @@ function process_users()
   return result
 end
 
-print("Example Skill initialized")
+print("Example Mod initialized")

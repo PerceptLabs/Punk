@@ -12,7 +12,7 @@ Punk/
 │   ├── tokens/           # @punk/tokens - TokiForge integration
 │   ├── synthpunk/        # @punk/synthpunk - AI engine
 │   ├── atompunk/         # @punk/atompunk - Backend templates
-│   └── glyphcase/        # @punk/glyphcase - SQLite + Lua skills
+│   └── glyphcase/        # @punk/glyphcase - SQLite + Lua mods
 ├── apps/
 │   ├── cli/              # Punk CLI (Go)
 │   └── mohawk/           # Mohawk web builder (Next.js)
@@ -105,10 +105,10 @@ Backend scaffolding templates:
 
 ### @punk/glyphcase
 
-Skills database and management:
+Mods database and management:
 - SQLite component storage
 - Lua scripting runtime
-- Skill installation
+- Mod installation
 
 **Location:** `/home/user/Punk/packages/glyphcase`
 

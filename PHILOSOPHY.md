@@ -724,7 +724,7 @@ When the same input produces different outputs:
    - Data binding
 
 3. **Extensibility**
-   - Custom components via Skills
+   - Custom components via Mods
    - Custom handlers
    - Custom styling
    - Custom templates
@@ -749,7 +749,7 @@ When the same input produces different outputs:
 | **Determinism** | Same input = same output | Non-deterministic |
 | **Accessibility** | Guaranteed WCAG AA | Must fix manually |
 | **Security** | Template-based backend | N/A (frontend only) |
-| **Extensibility** | Skill system | Limited |
+| **Extensibility** | Mod system | Limited |
 | **Self-hosting** | ✅ | ❌ |
 
 ### Punk vs Bolt.new
@@ -782,7 +782,7 @@ When the same input produces different outputs:
 
 **Response:** Schemas cover 95% of common UI patterns. For the other 5%, you can:
 - Write custom components
-- Use Skills to extend component library
+- Use Mods to extend component library
 - Drop down to React for complex cases
 
 **Counter-question:** How often do you need UI that can't be expressed as:

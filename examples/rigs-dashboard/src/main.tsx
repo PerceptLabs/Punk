@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom/client'
 import App from './App'
 
 /**
- * Main entry point for the Punk Loadout Dashboard Example
+ * Main entry point for the Punk Rigs Dashboard Example
  *
  * This file:
  * 1. Imports @punk/extended which auto-registers all extended components
@@ -15,7 +15,7 @@ import App from './App'
  * them available for use in JSON schemas.
  */
 
-// Import the extended loadout - this auto-registers all components
+// Import the extended rig - this auto-registers all components
 // NOTE: In a real implementation, this would be:
 // import '@punk/extended'
 // For now, we'll import the individual components as they're implemented
@@ -38,8 +38,8 @@ root.render(
 )
 
 // Log initialization for debugging
-console.log('🎸 Punk Loadout Dashboard initialized')
-console.log('📦 Using @punk/extended component loadout')
+console.log('🎸 Punk Rigs Dashboard initialized')
+console.log('📦 Using @punk/extended component rig')
 console.log('🎨 Components: Chart, Table, Mermaid')
 
 // Development mode hot module replacement

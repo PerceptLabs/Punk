@@ -48,7 +48,7 @@ A web-based AI application builder delivering a seamless chat-to-deployment expe
 **Bottom Tabs**
 - **Schema Inspector:** Raw JSON schema, validation status, edit mode
 - **Deployment:** Target selection, environment config, one-click deploy
-- **Settings:** Theme, code generation options, skill plugins
+- **Settings:** Theme, code generation options, mod plugins
 
 ---
 
@@ -114,7 +114,7 @@ On complete: type: 'schema_complete'
 1. **Schema Validation:** JSON schema validation on each chunk
 2. **Component Validation:** Verify referenced components exist
 3. **Props Validation:** Type-check against component signatures
-4. **Dependency Resolution:** Load required skills/plugins
+4. **Dependency Resolution:** Load required mods/plugins
 5. **Error Recovery:** Present validation errors with AI suggestions
 
 ### Error Recovery Strategy
@@ -225,47 +225,47 @@ volumes:
 
 ---
 
-## 6. Skills Integration (Plugin System)
+## 6. Mods Integration (Plugin System)
 
 ### GlyphCase-Based Architecture
 
-**Skill Discovery:**
-- Plugins register via skill manifest (JSON)
+**Mod Discovery:**
+- Plugins register via mod manifest (JSON)
 - Installed to `/plugins` directory
 - Loaded at startup with dependency resolution
 
 **Plugin Structure:**
 ```
 plugins/
-  ├── skill-ui-kit/
+  ├── mod-ui-kit/
   │   ├── manifest.json (name, version, exports)
   │   ├── index.js (exports)
   │   └── components/
   │       ├── Button.tsx
   │       └── Card.tsx
   │
-  └── skill-analytics/
+  └── mod-analytics/
       ├── manifest.json
       └── hooks.js
 ```
 
 ### Installation UI
-- **Skill Browser:** Searchable registry with previews
+- **Mod Browser:** Searchable registry with previews
 - **One-Click Install:** Download + register automatically
 - **Dependency Management:** Resolve transitive dependencies
 - **Conflict Detection:** Warn on version mismatches
 - **Enable/Disable Toggle:** Without uninstalling
 
 ### Configuration Panel
-- **Per-Skill Settings:** API keys, theme options, etc.
-- **Prompt Engineering:** Customize how skills are suggested to Claude
-- **Usage Statistics:** Track which skills are used
+- **Per-Mod Settings:** API keys, theme options, etc.
+- **Prompt Engineering:** Customize how mods are suggested to Claude
+- **Usage Statistics:** Track which mods are used
 - **Update Check:** Notify when updates available
 
 ### AI Prompt Injection
-When streaming schemas, include available skills:
+When streaming schemas, include available mods:
 ```
-Available skills:
+Available mods:
 - @ui-kit/components (Button, Card, Modal, ...)
 - @analytics/tracking (usePageView, useEvent, ...)
 - @auth/oauth (LoginButton, ProtectedRoute, ...)
@@ -359,7 +359,7 @@ Use these in your schema generation. Reference as:
 - Deploy to Vercel
 
 ### Phase 2
-- Auto-complete suggestions from skills
+- Auto-complete suggestions from mods
 - Multi-device preview
 - Environment configuration UI
 - Docker self-hosted option
@@ -368,7 +368,7 @@ Use these in your schema generation. Reference as:
 - Real-time collaboration
 - Version control integration
 - Advanced error recovery
-- Plugin marketplace
+- Depot integration (Rigs & Mods)
 
 ---
 

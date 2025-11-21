@@ -1,16 +1,16 @@
 # Lua Runtime Guide
 
-This document specifies the runtime options for Punk skills: **Lua 5.4 (default)** or **LuaJIT (optional)**.
+This document specifies the runtime options for Punk mods: **Lua 5.4 (default)** or **LuaJIT (optional)**.
 
 ## Runtime Choice
 
-Punk skills can run on two Lua runtimes, each optimized for different use cases:
+Punk mods can run on two Lua runtimes, each optimized for different use cases:
 
 ### Default: Lua 5.4
-**Recommended for most skills.** Offers modern language features, active maintenance, and reliable performance.
+**Recommended for most mods.** Offers modern language features, active maintenance, and reliable performance.
 
 ### Optional: LuaJIT
-**For performance-critical skills.** Provides 10-50x speed improvement through JIT compilation, at the cost of older syntax compatibility.
+**For performance-critical mods.** Provides 10-50x speed improvement through JIT compilation, at the cost of older syntax compatibility.
 
 ---
 
@@ -52,11 +52,11 @@ Punk skills can run on two Lua runtimes, each optimized for different use cases:
    - Better documentation availability
 
 ### Use Cases
-- General-purpose skills
+- General-purpose mods
 - Data processing and transformation
 - Configuration parsing
 - Web utilities
-- Skills where clarity > raw speed
+- Mods where clarity > raw speed
 - Mobile/embedded platforms
 
 ### Performance
@@ -128,7 +128,7 @@ Punk skills can run on two Lua runtimes, each optimized for different use cases:
 - Real-time processing (graphics, audio, game logic)
 - Large data structure manipulation
 - Performance-critical algorithms
-- Skills requiring FFI integration
+- Mods requiring FFI integration
 - Benchmarking shows clear performance bottleneck
 
 ---
@@ -137,12 +137,12 @@ Punk skills can run on two Lua runtimes, each optimized for different use cases:
 
 ### Configuration in manifest.json
 
-Specify the Lua runtime in your skill's `manifest.json`:
+Specify the Lua runtime in your mod's `manifest.json`:
 
 ```json
 {
-  "id": "my-skill",
-  "name": "My Skill",
+  "id": "my-mod",
+  "name": "My Mod",
   "version": "1.0.0",
   "lua": {
     "runtime": "5.4"
@@ -320,13 +320,13 @@ Both runtimes are sandboxed identically:
    ```
 
 3. **Resource Limits**
-   - Memory limit: 512MB (configurable per skill)
-   - CPU timeout: 30 seconds (configurable per skill)
+   - Memory limit: 512MB (configurable per mod)
+   - CPU timeout: 30 seconds (configurable per mod)
    - No file system access outside sandboxed directory
 
 4. **Execution Context**
-   - Each skill runs in isolated process/VM
-   - No access to other skill's memory
+   - Each mod runs in isolated process/VM
+   - No access to other mod's memory
    - Clean environment on each invocation
 
 ---
@@ -350,7 +350,7 @@ Both runtimes are sandboxed identically:
 ### When to Choose Each
 
 **Choose Lua 5.4 if:**
-- Skill involves mostly I/O (network, file, database)
+- Mod involves mostly I/O (network, file, database)
 - Performance is adequate in profiling
 - Code readability is priority
 - Modern language features needed
@@ -358,7 +358,7 @@ Both runtimes are sandboxed identically:
 
 **Choose LuaJIT if:**
 - Profiling shows CPU usage > 50%
-- Skill has tight loops or recursion
+- Mod has tight loops or recursion
 - FFI integration required
 - Performance is critical to user experience
 - Binary size is a constraint
@@ -370,7 +370,7 @@ Both runtimes are sandboxed identically:
 ```
 Start with Lua 5.4
       ↓
-   Profile skill
+   Profile mod
       ↓
    CPU > 50% of time?
       ├─ NO  → Keep Lua 5.4 ✓
@@ -392,7 +392,7 @@ Start with Lua 5.4
 
 ## Recommendation
 
-**Start with Lua 5.4 for all new skills.** Only migrate to LuaJIT if:
+**Start with Lua 5.4 for all new mods.** Only migrate to LuaJIT if:
 
 1. Profiling clearly shows performance bottleneck
 2. The bottleneck is CPU-bound (not I/O)
@@ -415,4 +415,4 @@ Switch to LuaJIT only as a performance optimization, not a default choice.
 - [Lua 5.4 Official](https://www.lua.org/)
 - [LuaJIT Official](https://luajit.org/)
 - [Punk Runtime API](./API.md)
-- [Skill Development Guide](./SKILL_DEVELOPMENT.md)
+- [Mod Development Guide](./SKILL_DEVELOPMENT.md)

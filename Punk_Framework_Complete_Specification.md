@@ -17,7 +17,7 @@
 7. [Colorful Terminal UI Design](#7-colorful-terminal-ui-design)
 8. [Core Technology Architecture](#8-core-technology-architecture)
 9. [GlyphCase Integration](#9-glyphcase-integration)
-10. [Skill Cases Extension System](#10-skill-cases-extension-system)
+10. [Mod Cases Extension System](#10-mod-cases-extension-system)
 11. [Extension Points Architecture](#11-extension-points-architecture)
 12. [Punk Schema Specification](#12-punk-schema-specification)
 13. [Backend Adapters](#13-backend-adapters)
@@ -30,7 +30,7 @@
 20. [Development Workflows](#20-development-workflows)
 21. [API Reference](#21-api-reference)
 22. [Configuration Reference](#22-configuration-reference)
-23. [Skill Development Guide](#23-skill-development-guide)
+23. [Mod Development Guide](#23-mod-development-guide)
 24. [Deployment Strategies](#24-deployment-strategies)
 25. [Performance Considerations](#25-performance-considerations)
 26. [Comparison with Alternatives](#26-comparison-with-alternatives)
@@ -79,7 +79,7 @@ The Punk ecosystem consists of four primary components:
         ┌─────────────┴─────────────┐
         │                           │
 ┌───────▼────────┐          ┌──────▼──────┐
-│   GlyphCase    │          │ Skill Cases │
+│   GlyphCase    │          │ Mod Cases │
 │  (Component 3) │          │ (Component 4)│
 │                │          │             │
 │ Optional       │          │ Extension   │
@@ -95,7 +95,7 @@ The Punk ecosystem consists of four primary components:
 2. **Safety by Default:** Sandboxed templates prevent security vulnerabilities
 3. **Accessibility First:** All generated UIs meet WCAG standards
 4. **Local-First:** Optional local database, no required cloud dependencies
-5. **Extensible:** Plugin system via portable Skill Cases
+5. **Extensible:** Plugin system via portable Mod Cases
 6. **Beautiful Tooling:** Colorful, animated terminal interfaces
 7. **Developer Choice:** Multiple backend options, flexible architecture
 8. **Self-Hosting:** Full platform can run locally
@@ -917,14 +917,14 @@ Choose your backend:
 [↑↓ to navigate, Enter to select, ← back, q to quit]
 ```
 
-#### 5.2.3 Skill Selection
+#### 5.2.3 Mod Selection
 
 ```
-Add skills? (optional)
+Add mods? (optional)
 
-Skills extend Punk with additional capabilities.
+Mods extend Punk with additional capabilities.
 
-Available skills:
+Available mods:
 
   ☐ shadcn-components    shadcn/ui component library
   ☐ supabase-backend     Supabase backend integration
@@ -944,7 +944,7 @@ Project configuration:
   Location:     ~/dev/my-awesome-app
   Tier:         Synthpunk
   Backend:      Encore.ts
-  Skills:       shadcn-components, supabase-backend
+  Mods:       shadcn-components, supabase-backend
   
   Package manager:
     ◉ npm
@@ -976,7 +976,7 @@ Creating your Punk app
 ⠋ Adding Synthpunk layer
   Merging configurations
   Setting up Encore.ts backend
-  Installing skills
+  Installing mods
   Generating README
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 40%
@@ -1012,7 +1012,7 @@ Creating your Punk app
 │  ├── @punk/adapters        v1.0.0                     │
 │  └── encore.dev            v1.40.0                    │
 │                                                         │
-│  Skills loaded:                                         │
+│  Mods loaded:                                         │
 │  ├── shadcn-components     v2.0.0                     │
 │  └── supabase-backend      v1.0.0                     │
 └─────────────────────────────────────────────────────────┘
@@ -1083,7 +1083,7 @@ What would you like to add?
 
   ◉ Tier upgrade         Upgrade to Synthpunk or Atompunk
   ○ Backend adapter      Add a new backend option
-  ○ Skill                Add a skill to extend capabilities
+  ○ Mod                Add a mod to extend capabilities
   ○ Component library    Add UI component library
   ○ Authentication       Add auth scaffolding
   ○ Database             Add database integration
@@ -1092,11 +1092,11 @@ What would you like to add?
 [Select to continue...]
 ```
 
-**Adding a Skill:**
+**Adding a Mod:**
 ```bash
-$ punk add skill
+$ punk add mod
 
-Search skills: supabase
+Search mods: supabase
 
 Results:
 
@@ -1125,11 +1125,11 @@ Results:
 ```
 Installing supabase-backend
 
-⠋ Downloading from https://skills.punk.dev/
+⠋ Downloading from https://mods.punk.dev/
 ✓ Downloaded supabase-backend.gcasex (234 KB)
 ⠋ Verifying checksum
 ✓ Verified (SHA256 match)
-⠋ Extracting skill
+⠋ Extracting mod
 ✓ Extracted 15 files
 ⠋ Installing dependencies
 ✓ Installed @supabase/supabase-js@2.39.0
@@ -1160,7 +1160,7 @@ Next steps:
        password: 'secure-password'
      })
 
-Documentation: https://docs.punk.dev/skills/supabase-backend
+Documentation: https://docs.punk.dev/mods/supabase-backend
 ```
 
 #### 5.3.3 `punk upgrade` - Tier Upgrades
@@ -1300,31 +1300,31 @@ Effects:
 [Enter to apply, ← back]
 ```
 
-#### 5.3.5 `punk skills` - Skill Management
+#### 5.3.5 `punk mods` - Mod Management
 
 ```bash
-$ punk skills
+$ punk mods
 
 ╔═══════════════════════════════════════════════════════════╗
-║  Skill Management                                         ║
+║  Mod Management                                         ║
 ╚═══════════════════════════════════════════════════════════╝
 
-  list          List installed and available skills
-  search        Search for skills
-  install       Install a skill
-  uninstall     Remove a skill
-  info          View skill details
-  update        Update installed skills
-  create        Create a new skill
+  list          List installed and available mods
+  search        Search for mods
+  install       Install a mod
+  uninstall     Remove a mod
+  info          View mod details
+  update        Update installed mods
+  create        Create a new mod
 
 [Type command or select from menu...]
 ```
 
-**List Skills:**
+**List Mods:**
 ```bash
-$ punk skills list
+$ punk mods list
 
-Installed Skills:
+Installed Mods:
 
   shadcn-components  v2.0.0
     shadcn/ui component library
@@ -1336,7 +1336,7 @@ Installed Skills:
     Extends: backend_adapter
     Last updated: 1 week ago
 
-Available Skills (from registry):
+Available Mods (from registry):
 
   firebase-backend   v2.1.0  ⭐ 4.7/5
     Firebase backend integration
@@ -1347,18 +1347,18 @@ Available Skills (from registry):
   pdf-processor      v1.2.0  ⭐ 4.6/5
     Process PDF files
     
-  [More skills available - punk skills search]
+  [More mods available - punk mods search]
 ```
 
-**Create Custom Skill:**
+**Create Custom Mod:**
 ```bash
-$ punk skill create
+$ punk mod create
 
 ╔═══════════════════════════════════════════════════════════╗
-║  Create New Skill                                         ║
+║  Create New Mod                                         ║
 ╚═══════════════════════════════════════════════════════════╝
 
-  Skill name:        my-custom-validator
+  Mod name:        my-custom-validator
   Description:       Custom validation rules for forms
   Extension point:   validator
   
@@ -1396,9 +1396,9 @@ Next steps:
   
   1. Edit scripts/validate.js with your validation logic
   2. Add rules to knowledge/rules.json
-  3. Test: punk skill test my-custom-validator
-  4. Build: punk skill build my-custom-validator
-  5. Publish: punk skill publish my-custom-validator
+  3. Test: punk mod test my-custom-validator
+  4. Build: punk mod build my-custom-validator
+  5. Publish: punk mod publish my-custom-validator
 ```
 
 ### 5.4 CLI Architecture
@@ -1426,7 +1426,7 @@ tools/cli/
 │   ├── dev.go               # punk dev
 │   ├── upgrade.go           # punk upgrade
 │   ├── theme.go             # punk theme
-│   ├── skills.go            # punk skills
+│   ├── mods.go            # punk mods
 │   └── config.go            # punk config
 │
 ├── ui/                       # UI components
@@ -1453,11 +1453,11 @@ tools/cli/
 │   ├── merger.go            # Template merging
 │   └── validator.go         # Validation
 │
-├── skills/                   # Skill management
-│   ├── manager.go           # Skill manager
+├── mods/                   # Mod management
+│   ├── manager.go           # Mod manager
 │   ├── installer.go         # Install/uninstall
 │   ├── registry.go          # Registry client
-│   └── validator.go         # Skill validation
+│   └── validator.go         # Mod validation
 │
 ├── config/                   # Configuration
 │   ├── config.go            # Config types
@@ -1488,7 +1488,7 @@ type Template struct {
     Name         string            `json:"name"`
     Tier         string            `json:"tier"`
     Backend      string            `json:"backend"`
-    Skills       []string          `json:"skills"`
+    Mods       []string          `json:"mods"`
     Dependencies []string          `json:"dependencies"`
     DevDeps      []string          `json:"devDependencies"`
     Files        map[string]string `json:"files"`
@@ -1510,13 +1510,13 @@ func NewComposer(templatesDir, outputDir string) *Composer {
 // Compose creates a project from modular templates
 func (c *Composer) Compose(
     name, tier, backend string,
-    skills []string,
+    mods []string,
 ) (*Template, error) {
     template := &Template{
         Name:         name,
         Tier:         tier,
         Backend:      backend,
-        Skills:       skills,
+        Mods:       mods,
         Dependencies: []string{},
         DevDeps:      []string{},
         Files:        make(map[string]string),
@@ -1546,13 +1546,13 @@ func (c *Composer) Compose(
         c.merge(template, backendModule)
     }
     
-    // 4. Load skill templates
-    for _, skill := range skills {
-        skillModule, err := c.loadSkill(skill)
+    // 4. Load mod templates
+    for _, mod := range mods {
+        modModule, err := c.loadMod(mod)
         if err != nil {
-            return nil, fmt.Errorf("failed to load skill %s: %w", skill, err)
+            return nil, fmt.Errorf("failed to load mod %s: %w", mod, err)
         }
-        c.merge(template, skillModule)
+        c.merge(template, modModule)
     }
     
     return template, nil
@@ -1577,15 +1577,15 @@ func (c *Composer) loadModule(path string) (*Module, error) {
     return &module, nil
 }
 
-// loadSkill loads a skill from .gcasex file or directory
-func (c *Composer) loadSkill(skillPath string) (*Module, error) {
+// loadMod loads a mod from .gcasex file or directory
+func (c *Composer) loadMod(modPath string) (*Module, error) {
     // Check if it's a .gcasex file
-    if filepath.Ext(skillPath) == ".gcasex" {
-        return c.loadSkillFromGlyphCase(skillPath)
+    if filepath.Ext(modPath) == ".gcasex" {
+        return c.loadModFromGlyphCase(modPath)
     }
     
     // Otherwise load from directory
-    return c.loadModule(skillPath)
+    return c.loadModule(modPath)
 }
 
 // merge combines a module into the template
@@ -1710,9 +1710,9 @@ func (c *Composer) generatePunkConfig(template *Template) error {
     config := fmt.Sprintf(`export default {
   tier: '%s',
   backend: '%s',
-  skills: %s,
+  mods: %s,
 }
-`, template.Tier, template.Backend, c.formatSkills(template.Skills))
+`, template.Tier, template.Backend, c.formatMods(template.Mods))
     
     path := filepath.Join(c.outputDir, "punk.config.js")
     return os.WriteFile(path, []byte(config), 0644)
@@ -1956,7 +1956,7 @@ Current version: v1.0.0
 Latest version:  v1.1.0
 
 Changelog:
-  • Added Firebase backend skill
+  • Added Firebase backend mod
   • Improved Synthpunk generation
   • Fixed Windows path issues
   • Updated dependencies
@@ -2083,7 +2083,7 @@ export function TopBar() {
           <DropdownMenuContent>
             <DropdownMenuItem>Project Settings</DropdownMenuItem>
             <DropdownMenuItem>Backend Config</DropdownMenuItem>
-            <DropdownMenuItem>Skills</DropdownMenuItem>
+            <DropdownMenuItem>Mods</DropdownMenuItem>
             <DropdownMenuItem>Export Code</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
@@ -2435,7 +2435,7 @@ apps/atompunk-web/backend/
 │   ├── preview.ts           # Live preview server
 │   ├── deployment.ts        # Deploy apps
 │   ├── revisions.ts         # Revision management
-│   └── skills.ts            # Skill management
+│   └── mods.ts            # Mod management
 │
 ├── engine/
 │   ├── epoch.ts             # Synthpunk AI engine
@@ -2447,7 +2447,7 @@ apps/atompunk-web/backend/
 │   ├── encore-ts/           # Encore.ts templates
 │   ├── encore-go/           # Encore Go templates
 │   ├── trpc/                # tRPC templates
-│   └── supabase/            # Supabase templates (from skill)
+│   └── supabase/            # Supabase templates (from mod)
 │
 └── db/
     ├── schema.ts            # Database schema
@@ -2476,7 +2476,7 @@ export interface ChatContext {
   previousMessages: Message[]
   currentSchema?: PunkSchema
   projectConfig: ProjectConfig
-  skills: string[]
+  mods: string[]
 }
 
 export interface ChatResponse {
@@ -2531,13 +2531,13 @@ function buildSystemPrompt(context: ChatContext): string {
 
 # Available Component Types
 
-${getComponentTypes(context.skills)}
+${getComponentTypes(context.mods)}
 
 # Project Context
 
 Project type: ${context.projectConfig.tier}
 Backend: ${context.projectConfig.backend}
-Loaded skills: ${context.skills.join(', ')}
+Loaded mods: ${context.mods.join(', ')}
 
 # Current Schema
 
@@ -2558,10 +2558,10 @@ When generating backend code:
 4. Return code in appropriate code blocks
 `
 
-  // Add skill-specific context
-  for (const skill of context.skills) {
-    prompt += `\n\n# Skill: ${skill}\n`
-    prompt += await getSkillContext(skill)
+  // Add mod-specific context
+  for (const mod of context.mods) {
+    prompt += `\n\n# Mod: ${mod}\n`
+    prompt += await getModContext(mod)
   }
   
   return prompt
@@ -2668,7 +2668,7 @@ export interface GenerationRequest {
 export interface GenerationOptions {
   backend?: string
   features?: Features
-  skills?: string[]
+  mods?: string[]
 }
 
 export interface Features {
@@ -2701,8 +2701,8 @@ async function generateSynthpunk(req: GenerationRequest): Promise<GenerationResu
     model: 'claude-sonnet-4-20250514'
   })
   
-  // Load context from skills
-  const context = await loadSkillContext(req.options.skills || [])
+  // Load context from mods
+  const context = await loadModContext(req.options.mods || [])
   
   // Generate schema
   const schema = await epoch.generate({
@@ -2736,18 +2736,18 @@ async function generateAtompunk(req: GenerationRequest): Promise<GenerationResul
     backend: req.options.backend || 'encore-ts'
   })
   
-  // Load skills
-  const skills = await loadSkills(req.options.skills || [])
+  // Load mods
+  const mods = await loadMods(req.options.mods || [])
   
-  // Get backend adapter (from core or skill)
-  const backendAdapter = getBackendAdapter(req.options.backend!, skills)
+  // Get backend adapter (from core or mod)
+  const backendAdapter = getBackendAdapter(req.options.backend!, mods)
   
   // Generate full-stack
   const result = await atompunk.generateFullStack({
     prompt: req.prompt,
     features: req.options.features,
     backendAdapter,
-    skills
+    mods
   })
   
   // Validate all outputs
@@ -2767,7 +2767,7 @@ async function generateAtompunk(req: GenerationRequest): Promise<GenerationResul
   return result
 }
 
-function getBackendAdapter(backendName: string, skills: Skill[]): BackendAdapter {
+function getBackendAdapter(backendName: string, mods: Mod[]): BackendAdapter {
   // Check core adapters
   const coreAdapters = {
     'encore-ts': EncoreTsAdapter,
@@ -2779,25 +2779,25 @@ function getBackendAdapter(backendName: string, skills: Skill[]): BackendAdapter
     return new coreAdapters[backendName]()
   }
   
-  // Check skill adapters
-  for (const skill of skills) {
-    if (skill.extends === 'backend_adapter' && skill.name === backendName) {
-      return createSkillAdapter(skill)
+  // Check mod adapters
+  for (const mod of mods) {
+    if (mod.extends === 'backend_adapter' && mod.name === backendName) {
+      return createModAdapter(mod)
     }
   }
   
   throw new Error(`Backend adapter '${backendName}' not found`)
 }
 
-function createSkillAdapter(skill: Skill): BackendAdapter {
+function createModAdapter(mod: Mod): BackendAdapter {
   return {
-    name: skill.name,
+    name: mod.name,
     generate: async (params) => {
-      // Execute skill's generation script
-      return await skill.execute('/scripts/generate.js', params)
+      // Execute mod's generation script
+      return await mod.execute('/scripts/generate.js', params)
     },
     validate: async (code) => {
-      return await skill.execute('/scripts/validate.js', code)
+      return await mod.execute('/scripts/validate.js', code)
     }
   }
 }

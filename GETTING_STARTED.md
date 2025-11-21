@@ -206,7 +206,7 @@ export default App
 export default {
   tier: 'punk',        // Current tier (punk, synthpunk, atompunk)
   backend: 'none',     // Backend adapter
-  skills: [],          // Installed skills
+  mods: [],          // Installed mods
   theme: 'punk',       // CLI theme
 }
 ```
@@ -642,7 +642,7 @@ See [deployment docs](https://docs.punk.dev/deployment) for:
 - **[CLI Reference](CLI_REFERENCE.md)** - All CLI commands
 - **[Component Reference](COMPONENT_REFERENCE.md)** - Available components
 - **[Backend Guide](BACKEND_GUIDE.md)** - Backend options
-- **[Skills Guide](SKILLS_GUIDE.md)** - Extending Punk
+- **[Mods Guide](SKILLS_GUIDE.md)** - Extending Punk
 
 ### Explore Examples
 

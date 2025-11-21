@@ -1,4 +1,4 @@
-# Punk Framework - Loadout System Implementation Plan
+# Punk Framework - Rigs System Implementation Plan
 
 **Status:** Ready for implementation
 **Created:** 2025-11-19
@@ -8,10 +8,10 @@
 
 ## 🎯 What We're Building
 
-A **loadout system** for Punk Framework - curated collections of pre-wrapped React component libraries that work via JSON schemas (like Puck).
+A **rigs system** for Punk Framework - curated collections of pre-wrapped React component libraries that work via JSON schemas (like Puck).
 
 ### Key Principles:
-- **Loadouts = npm packages** bundling component wrappers
+- **Rigs = npm packages** bundling component wrappers
 - **NOT rendering engines** - just convenience collections
 - **Renderer-agnostic** - works in DOM/GPU/XR modes
 - **Easy extension** - clear pattern for custom components
@@ -219,7 +219,7 @@ registerComponent('{Name}', {Name}, {
   - Use `meta.complexity` for beginner/advanced filtering
 
 ### Phase 6: Examples
-- [ ] **Task 6.1:** Create `examples/loadout-dashboard/`
+- [ ] **Task 6.1:** Create `examples/rigs-dashboard/`
   - Show `@punk/extended` usage
   - Demonstrate Chart + Table + Mermaid
   - Include README with installation instructions
@@ -242,7 +242,7 @@ registerComponent('{Name}', {Name}, {
   - Integration with DataContext/ActionBus
 
 - [ ] **Task 7.3:** Update main `README.md`
-  - Add loadout system overview
+  - Add rigs system overview
   - Link to component documentation
 
 ---
@@ -338,7 +338,7 @@ registerComponent('{Name}', {Name}, {
 
 **In a new Claude Code session:**
 
-1. Say: **"Continue implementing LOADOUT_IMPLEMENTATION_PLAN.md"**
+1. Say: **"Continue implementing RIGS_IMPLEMENTATION_PLAN.md"**
 2. Claude will read this file + the todo list
 3. Execution will begin following the agent plan above
 

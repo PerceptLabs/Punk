@@ -1,5 +1,5 @@
 /**
- * Sample data for the Punk Loadout Dashboard Example
+ * Sample data for the Punk Rigs Dashboard Example
  *
  * This file contains realistic sample data for:
  * - Monthly revenue metrics
@@ -194,7 +194,7 @@ graph TB
         DataCtx[Data Context]
     end
 
-    subgraph Extended["@punk/extended Loadout"]
+    subgraph Extended["@punk/extended Rig"]
         Chart[Chart Component]
         Table[Table Component]
         Mermaid[Mermaid Component]

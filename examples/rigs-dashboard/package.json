@@ -1,7 +1,7 @@
 {
-  "name": "loadout-dashboard-example",
+  "name": "rigs-dashboard-example",
   "version": "1.0.0",
-  "description": "Punk Framework Extended Loadout Dashboard Example",
+  "description": "Punk Framework Extended Rig Dashboard Example",
   "private": true,
   "type": "module",
   "scripts": {

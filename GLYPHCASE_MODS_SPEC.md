@@ -1,8 +1,8 @@
-# GlyphCase Skills Specification
+# GlyphCase Mods Specification
 
-## What is a Skill?
+## What is a Mod?
 
-A **Skill** is a portable plugin that extends Atompunk with new functionality. Skills are self-contained packages that bundle:
+A **Mod** is a portable plugin that extends Atompunk with new functionality. Mods are self-contained packages that bundle:
 
 - **Punk components** - UI and interactive elements
 - **Backend templates** - Server-side logic and API handlers
@@ -10,22 +10,22 @@ A **Skill** is a portable plugin that extends Atompunk with new functionality. S
 - **GlyphCase SQLite database** - Local-first data storage with reactivity
 - **Lua scripts** - Embedded runtime for reactive logic, data transforms, and business rules
 
-Skills enable modular, composable extension of Atompunk projects without modifying core code.
+Mods enable modular, composable extension of Atompunk projects without modifying core code.
 
 ### Why Lua?
 
-Lua provides a **safe, fast, embeddable scripting layer** for skills:
+Lua provides a **safe, fast, embeddable scripting layer** for mods:
 
-- ✅ **Sandboxed** - Restricted runtime prevents malicious code
-- ✅ **Fast** - LuaJIT compilation for performance-critical logic
-- ✅ **Lightweight** - Small footprint (~200KB runtime)
-- ✅ **Reactive** - Scripts respond to Active Capsule data changes
-- ✅ **Portable** - Works across platforms without dependencies
+- **Sandboxed** - Restricted runtime prevents malicious code
+- **Fast** - LuaJIT compilation for performance-critical logic
+- **Lightweight** - Small footprint (~200KB runtime)
+- **Reactive** - Scripts respond to Active Capsule data changes
+- **Portable** - Works across platforms without dependencies
 
-## Skill Structure
+## Mod Structure
 
 ```
-skill-name/
+mod-name/
 ├── manifest.json          # Metadata: name, version, dependencies, permissions
 ├── components/            # Punk components (UI elements)
 │   ├── Button.punk
@@ -36,12 +36,12 @@ skill-name/
 │   ├── workers.ts
 │   └── ...
 ├── scripts/               # Lua scripts (reactive logic, transforms)
-│   ├── init.lua          # Skill initialization
+│   ├── init.lua          # Mod initialization
 │   ├── hooks.lua         # Lifecycle hooks
 │   ├── transforms.lua    # Data transformations
 │   └── reactive.lua      # Active Capsule reactions
 ├── glyphcase.db          # SQLite database with schema and Active Capsules
-├── README.md             # Skill documentation
+├── README.md             # Mod documentation
 └── package.json          # Dependencies (optional)
 ```
 
@@ -49,10 +49,10 @@ skill-name/
 
 ```json
 {
-  "id": "skill-name",
-  "name": "Skill Display Name",
+  "id": "mod-name",
+  "name": "Mod Display Name",
   "version": "1.0.0",
-  "description": "What this skill does",
+  "description": "What this mod does",
   "author": "Author Name",
   "extends": {
     "components": ["Button", "Modal"],
@@ -78,26 +78,26 @@ skill-name/
 
 ## GlyphCase Integration
 
-GlyphCase provides the reactive, local-first data layer for skills:
+GlyphCase provides the reactive, local-first data layer for mods:
 
 - **SQLite Storage** - Lightweight, portable embedded database
 - **Active Capsule** - Reactive data binding that automatically syncs UI updates
-- **Schema Definition** - Declarative table structures in the skill's glyphcase.db
+- **Schema Definition** - Declarative table structures in the mod's glyphcase.db
 - **Sync Engine** - Optional backend synchronization for cloud features
 - **Lua Runtime** - Embedded scripting for reactive logic and data transforms
 
-Skills access GlyphCase through the ActionBus and Lua scripts:
+Mods access GlyphCase through the ActionBus and Lua scripts:
 
 ```typescript
 // Query data
 const users = await ActionBus.dispatch('glyphcase:query', {
-  skill: 'skill-name',
+  mod: 'mod-name',
   table: 'users'
 });
 
 // Insert/update data
 await ActionBus.dispatch('glyphcase:upsert', {
-  skill: 'skill-name',
+  mod: 'mod-name',
   table: 'users',
   data: { id: 1, name: 'Alice' }
 });
@@ -110,7 +110,7 @@ ActionBus.subscribe('glyphcase:changed', (event) => {
 
 ### Lua Scripts for Reactive Logic
 
-Skills can use Lua to respond to Active Capsule changes:
+Mods can use Lua to respond to Active Capsule changes:
 
 **scripts/reactive.lua** - React to database changes:
 ```lua
@@ -180,9 +180,9 @@ end
 
 **scripts/hooks.lua** - Lifecycle hooks:
 ```lua
--- Called when skill is installed
+-- Called when mod is installed
 function on_install()
-  print("Installing skill...")
+  print("Installing mod...")
 
   -- Create default data
   glyphcase.insert("settings", {
@@ -191,20 +191,20 @@ function on_install()
   })
 
   -- Register ActionBus handlers
-  actionbus.register("skill:action", handle_action)
+  actionbus.register("mod:action", handle_action)
 end
 
--- Called when skill is activated
+-- Called when mod is activated
 function on_activate()
-  print("Skill activated")
+  print("Mod activated")
 
   -- Start background jobs
   scheduler.every("1h", sync_data)
 end
 
--- Called when skill is deactivated
+-- Called when mod is deactivated
 function on_deactivate()
-  print("Skill deactivated")
+  print("Mod deactivated")
 
   -- Cleanup
   scheduler.stop_all()
@@ -216,19 +216,19 @@ end
 ### CLI Installation
 
 ```bash
-punk add skill shadcn-components
-punk add skill supabase-backend
-punk add skill pdf-processor
+punk add mod shadcn-components
+punk add mod supabase-backend
+punk add mod pdf-processor
 ```
 
 ### Builder Installation
 
 1. Open Mohawk
-2. Navigate to **Extensions > Skills**
-3. Browse available skills
+2. Navigate to **Extensions > Mods**
+3. Browse available mods
 4. Click **Install** for one-click installation
 
-## Example Skills
+## Example Mods
 
 ### shadcn-components
 Pre-built UI component library with styles and animations. Provides Button, Modal, Card, Form, etc.
@@ -248,17 +248,17 @@ Event tracking and analytics. ActionBus hooks for pageviews, user actions, and c
 ## Security Model
 
 ### Permission System
-Skills declare required permissions in manifest.json:
+Mods declare required permissions in manifest.json:
 - `database` - Access to GlyphCase
 - `network` - HTTP requests to external services
 - `filesystem` - Read/write local files
 - `actionbus` - Dispatch to action handlers
 
 ### Sandboxing
-Skills run in isolated contexts:
+Mods run in isolated contexts:
 - Component code has restricted DOM access
 - Template code runs with declared permissions only
-- Database access scoped to skill namespace
+- Database access scoped to mod namespace
 - **Lua runtime is fully sandboxed**:
   - No access to `os`, `io`, `debug`, `package` modules by default
   - File system access requires explicit permission
@@ -267,24 +267,24 @@ Skills run in isolated contexts:
   - Cannot load arbitrary C libraries
 
 ### Code Signing (Optional)
-Trusted publishers can sign skills for verified installation:
+Trusted publishers can sign mods for verified installation:
 
 ```bash
-punk sign-skill ./my-skill --key ~/.punk/keys/private.pem
+punk sign-mod ./my-mod --key ~/.punk/keys/private.pem
 ```
 
 ## Development
 
-### Create a New Skill
+### Create a New Mod
 
 ```bash
-punk create-skill my-skill
+punk create-mod my-mod
 ```
 
-This generates the skill template:
+This generates the mod template:
 
 ```
-my-skill/
+my-mod/
 ├── manifest.json
 ├── components/
 │   └── MyComponent.punk
@@ -298,19 +298,19 @@ my-skill/
 
 ```bash
 # Install from local directory
-punk add skill ./my-skill --local
+punk add mod ./my-mod --local
 
 # Watch for changes
-punk dev-skill ./my-skill --watch
+punk dev-mod ./my-mod --watch
 
 # Test in sandbox
-punk test-skill ./my-skill
+punk test-mod ./my-mod
 ```
 
 ### Publishing
 
 ```bash
-punk publish-skill ./my-skill --registry official
+punk publish-mod ./my-mod --registry official
 ```
 
 ## Schema Definition
@@ -336,7 +336,7 @@ CREATE TABLE events (
 
 ## Lua API Reference
 
-Skills have access to these Lua APIs in the sandboxed environment:
+Mods have access to these Lua APIs in the sandboxed environment:
 
 ### glyphcase (Database Operations)
 ```lua
@@ -362,7 +362,7 @@ glyphcase.execute("CREATE INDEX idx_email ON users(email)")
 actionbus.dispatch("email:send", { to = "user@example.com" })
 
 -- Register handler
-actionbus.register("skill:custom", function(payload)
+actionbus.register("mod:custom", function(payload)
   return { success = true }
 end)
 ```
@@ -417,11 +417,11 @@ cache.delete("key")
 
 ## Best Practices
 
-1. **Namespace Everything** - Use skill ID as prefix for actions, components, tables
+1. **Namespace Everything** - Use mod ID as prefix for actions, components, tables
 2. **Document Schemas** - Clear ERD or schema documentation
-3. **Minimize Dependencies** - Keep skills self-contained
+3. **Minimize Dependencies** - Keep mods self-contained
 4. **Handle Permissions** - Request only necessary permissions
-5. **Test Offline** - Ensure skills work without network
+5. **Test Offline** - Ensure mods work without network
 6. **Version Stability** - Use semantic versioning; breaking changes increment major version
 7. **Error Handling** - Graceful degradation when permissions denied
 8. **Lua Performance**:

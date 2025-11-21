@@ -38,7 +38,7 @@ export default function Home() {
           <div className="p-8 border-2 border-gray-200 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 opacity-75">
             <div className="text-4xl mb-4">📦</div>
             <h2 className="text-2xl font-semibold mb-2 text-gray-900 dark:text-gray-100">
-              Browse Skills
+              Browse Mods
             </h2>
             <p className="text-gray-600 dark:text-gray-400">
               Explore components from the GlyphCase library.

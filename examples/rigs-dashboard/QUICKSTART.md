@@ -1,12 +1,12 @@
 # Quick Start Guide
 
-Get the Punk Loadout Dashboard running in 2 minutes.
+Get the Punk Rigs Dashboard running in 2 minutes.
 
 ## Installation
 
 ```bash
 # From the repository root
-cd examples/loadout-dashboard
+cd examples/rigs-dashboard
 
 # Install dependencies
 pnpm install
@@ -114,7 +114,7 @@ pnpm clean            # Remove build artifacts (if available)
 ## Getting Help
 
 - **Punk Core Docs**: `/packages/core/README.md`
-- **Extended Loadout**: `/packages/extended/README.md`
+- **Extended Rig**: `/packages/extended/README.md`
 - **Chart.js**: https://www.chartjs.org/
 - **TanStack Table**: https://tanstack.com/table/
 - **Mermaid**: https://mermaid.js.org/

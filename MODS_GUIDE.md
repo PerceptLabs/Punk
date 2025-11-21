@@ -1,25 +1,25 @@
-# Skills Guide
+# Mods Guide
 
-Complete guide to the Punk skill system - portable plugins via GlyphCase.
+Complete guide to the Punk mod system - portable plugins via GlyphCase.
 
 ---
 
 ## Table of Contents
 
-1. [What are Skills?](#what-are-skills)
-2. [Installing Skills](#installing-skills)
-3. [Available Skills](#available-skills)
-4. [Creating Skills](#creating-skills)
-5. [Skill Structure](#skill-structure)
+1. [What are Mods?](#what-are-mods)
+2. [Installing Mods](#installing-mods)
+3. [Available Mods](#available-mods)
+4. [Creating Mods](#creating-mods)
+5. [Mod Structure](#mod-structure)
 6. [Extension Points](#extension-points)
-7. [Publishing Skills](#publishing-skills)
+7. [Publishing Mods](#publishing-mods)
 8. [GlyphCase Format](#glyphcase-format)
 
 ---
 
-## What are Skills?
+## What are Mods?
 
-**Skills** are portable plugins that extend Punk's capabilities. They're packaged as **GlyphCase (.gcasex) files** - self-contained bundles that include:
+**Mods** are portable plugins that extend Punk's capabilities. They're packaged as **GlyphCase (.gcasex) files** - self-contained bundles that include:
 
 - **TCMR scripts** (sandboxed JavaScript)
 - **Knowledge base** (JSON data)
@@ -27,34 +27,34 @@ Complete guide to the Punk skill system - portable plugins via GlyphCase.
 - **Dependencies** (npm packages)
 - **Documentation** (README, examples)
 
-### Why Skills?
+### Why Mods?
 
-- ✅ **Portable** - Single .gcasex file contains everything
-- ✅ **Sandboxed** - TCMR execution prevents security issues
-- ✅ **Versioned** - Immutable, content-addressed
-- ✅ **Shareable** - Easy to distribute and install
-- ✅ **Self-contained** - No external dependencies required
+- **Portable** - Single .gcasex file contains everything
+- **Sandboxed** - TCMR execution prevents security issues
+- **Versioned** - Immutable, content-addressed
+- **Shareable** - Easy to distribute and install
+- **Self-contained** - No external dependencies required
 
 ---
 
-## Installing Skills
+## Installing Mods
 
 ### Via CLI (Interactive)
 
 ```bash
-punk add skill
+punk add mod
 ```
 
-Search and install from the marketplace:
+Search and install from the depot:
 
 ```
-Search skills: supabase
+Search mods: supabase
 
 Results:
-  ◉ supabase-backend     v1.0.0  ⭐ 4.8/5 (1.2k)
+  * supabase-backend     v1.0.0  4.8/5 (1.2k)
     Supabase backend adapter
 
-  ○ supabase-auth        v2.1.0  ⭐ 4.6/5 (834)
+  o supabase-auth        v2.1.0  4.6/5 (834)
     Supabase auth patterns
 
 [Enter to install]
@@ -63,17 +63,17 @@ Results:
 ### Via CLI (Direct)
 
 ```bash
-# Install from marketplace
-punk skills install supabase-backend
+# Install from depot
+punk mods install supabase-backend
 
 # Install specific version
-punk skills install supabase-backend@1.0.0
+punk mods install supabase-backend@1.0.0
 
 # Install from file
-punk skills install ./my-skill.gcasex
+punk mods install ./my-mod.gcasex
 
 # Install from URL
-punk skills install https://skills.punk.dev/my-skill.gcasex
+punk mods install https://depot.punk.dev/my-mod.gcasex
 ```
 
 ### Via Configuration
@@ -81,30 +81,30 @@ punk skills install https://skills.punk.dev/my-skill.gcasex
 ```javascript
 // punk.config.js
 export default {
-  skills: [
+  mods: [
     'shadcn-components',
     'supabase-backend@2.0.0',
-    './local-skill.gcasex'
+    './local-mod.gcasex'
   ]
 }
 ```
 
 Then run:
 ```bash
-npm install  # Installs skill dependencies
+npm install  # Installs mod dependencies
 ```
 
 ---
 
-## Available Skills
+## Available Mods
 
-### Official Skills
+### Official Mods
 
 #### shadcn-components
 **shadcn/ui component library integration**
 
 ```bash
-punk skills install shadcn-components
+punk mods install shadcn-components
 ```
 
 Adds:
@@ -117,7 +117,7 @@ Adds:
 **Supabase backend adapter**
 
 ```bash
-punk skills install supabase-backend
+punk mods install supabase-backend
 ```
 
 Features:
@@ -131,7 +131,7 @@ Features:
 **Firebase backend integration**
 
 ```bash
-punk skills install firebase-backend
+punk mods install firebase-backend
 ```
 
 Features:
@@ -145,7 +145,7 @@ Features:
 **Generate Microsoft Word documents**
 
 ```bash
-punk skills install docx-generator
+punk mods install docx-generator
 ```
 
 Features:
@@ -158,7 +158,7 @@ Features:
 **Process PDF files**
 
 ```bash
-punk skills install pdf-processor
+punk mods install pdf-processor
 ```
 
 Features:
@@ -167,22 +167,22 @@ Features:
 - Form filling
 - PDF generation
 
-### Community Skills
+### Community Mods
 
-Browse all skills at: [skills.punk.dev](https://skills.punk.dev)
+Browse all mods at: [depot.punk.dev](https://depot.punk.dev)
 
 ---
 
-## Creating Skills
+## Creating Mods
 
-### Initialize a New Skill
+### Initialize a New Mod
 
 ```bash
-punk skills create
+punk mods create
 ```
 
 Interactive prompts:
-1. **Skill name:** `my-custom-validator`
+1. **Mod name:** `my-custom-validator`
 2. **Description:** `Custom validation rules for forms`
 3. **Extension point:** `validator`
 4. **Template:** `Validator`
@@ -203,13 +203,13 @@ my-custom-validator/
 │   └── validate.test.js
 ├── README.md               # Documentation
 ├── package.json            # Metadata
-└── skill.json              # Skill manifest
+└── mod.json                # Mod manifest
 ```
 
-### Skill Manifest
+### Mod Manifest
 
 ```json
-// skill.json
+// mod.json
 {
   "name": "my-custom-validator",
   "version": "1.0.0",
@@ -237,7 +237,7 @@ my-custom-validator/
 
 ---
 
-## Skill Structure
+## Mod Structure
 
 ### TCMR Scripts
 
@@ -321,14 +321,14 @@ export function validatePhone(phone, country = 'US') {
 // templates/validator.ts
 import { z } from 'zod'
 
-export const {{skillName}}Schema = z.object({
+export const {{modName}}Schema = z.object({
   {{#each fields}}
   {{name}}: z.{{type}}(){{#if required}}.min(1){{/if}},
   {{/each}}
 })
 
-export function validate{{skillName}}(data: unknown) {
-  return {{skillName}}Schema.parse(data)
+export function validate{{modName}}(data: unknown) {
+  return {{modName}}Schema.parse(data)
 }
 ```
 
@@ -336,7 +336,7 @@ export function validate{{skillName}}(data: unknown) {
 
 ## Extension Points
 
-Skills can extend Punk at specific extension points:
+Mods can extend Punk at specific extension points:
 
 ### 1. UI Components
 
@@ -402,13 +402,13 @@ export function buildPrompt(context) {
 
 ---
 
-## Publishing Skills
+## Publishing Mods
 
-### Build Your Skill
+### Build Your Mod
 
 ```bash
 cd my-custom-validator
-punk skill build
+punk mod build
 ```
 
 This creates: `my-custom-validator.gcasex`
@@ -418,21 +418,21 @@ This creates: `my-custom-validator.gcasex`
 ```bash
 # Test in a test project
 cd ../test-project
-punk skills install ../my-custom-validator/my-custom-validator.gcasex
+punk mods install ../my-custom-validator/my-custom-validator.gcasex
 ```
 
-### Publish to Marketplace
+### Publish to Depot
 
 ```bash
-punk skill publish
+punk mod publish
 ```
 
 Requirements:
-- ✅ README.md with documentation
-- ✅ Tests (minimum 80% coverage)
-- ✅ Valid skill.json manifest
-- ✅ No security vulnerabilities
-- ✅ Valid license (MIT, Apache 2.0, etc.)
+- README.md with documentation
+- Tests (minimum 80% coverage)
+- Valid mod.json manifest
+- No security vulnerabilities
+- Valid license (MIT, Apache 2.0, etc.)
 
 Interactive prompts:
 1. **Category:** Backend, UI, Utility, AI, etc.
@@ -450,7 +450,7 @@ gh release create v1.0.0 my-custom-validator.gcasex
 
 Users can install:
 ```bash
-punk skills install github:username/repo@v1.0.0
+punk mods install github:username/repo@v1.0.0
 ```
 
 ---
@@ -469,11 +469,11 @@ punk skills install github:username/repo@v1.0.0
 
 ### Why SQLite?
 
-- ✅ **Single file** - Easy to distribute
-- ✅ **Queryable** - Fast lookups
-- ✅ **Portable** - Works everywhere
-- ✅ **Verifiable** - Built-in checksums
-- ✅ **Version controlled** - Can be committed
+- **Single file** - Easy to distribute
+- **Queryable** - Fast lookups
+- **Portable** - Works everywhere
+- **Verifiable** - Built-in checksums
+- **Version controlled** - Can be committed
 
 ### Structure
 
@@ -515,10 +515,10 @@ CREATE TABLE assets (
 // build-gcasex.js
 import { GlyphCaseBuilder } from '@punk/glyphcase'
 
-const builder = new GlyphCaseBuilder('my-skill.gcasex')
+const builder = new GlyphCaseBuilder('my-mod.gcasex')
 
 // Add metadata
-builder.setMetadata('name', 'my-skill')
+builder.setMetadata('name', 'my-mod')
 builder.setMetadata('version', '1.0.0')
 
 // Add scripts
@@ -538,12 +538,12 @@ await builder.build()
 
 ---
 
-## Example: Creating a Stripe Skill
+## Example: Creating a Stripe Mod
 
 ### 1. Initialize
 
 ```bash
-punk skills create stripe-payments \
+punk mods create stripe-payments \
   --extension-point backend_adapter \
   --template backend
 ```
@@ -636,13 +636,13 @@ export const createPayment = api(
 
 ```bash
 # Build
-punk skill build
+punk mod build
 
 # Test
-punk skill test
+punk mod test
 
 # Publish
-punk skill publish --category payments --price 19.99
+punk mod publish --category payments --price 19.99
 ```
 
 ---
@@ -673,4 +673,4 @@ punk skill publish --category payments --price 19.99
 
 ---
 
-[Back to README](README.md) • [Backend Guide](BACKEND_GUIDE.md) • [Contributing](CONTRIBUTING.md)
+[Back to README](README.md) | [Backend Guide](BACKEND_GUIDE.md) | [Contributing](CONTRIBUTING.md)

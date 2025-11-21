@@ -2,7 +2,7 @@
  * GlyphCase Logger
  *
  * Structured logging for Active Capsule reactive database,
- * Lua runtime, and skill management
+ * Lua runtime, and mod management
  */
 
 import { configure, getConsoleSink, getLogger, type LogLevel } from '@logtape/logtape'
@@ -63,7 +63,7 @@ export function createLogger(...category: string[]) {
 export const loggers = {
   capsule: createLogger('capsule'),
   lua: createLogger('lua'),
-  skills: createLogger('skills'),
+  mods: createLogger('mods'),
   sync: createLogger('sync'),
   events: createLogger('events'),
 } as const

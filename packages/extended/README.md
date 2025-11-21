@@ -1,6 +1,6 @@
 # @punk/extended
 
-> Extended component loadout for Punk Framework - curated collection of component wrappers
+> Extended component rig for Punk Framework - curated collection of component wrappers
 
 [![Version](https://img.shields.io/npm/v/@punk/extended.svg)](https://www.npmjs.com/package/@punk/extended)
 [![License](https://img.shields.io/npm/l/@punk/extended.svg)](https://github.com/PerceptLabs/Punk/blob/main/LICENSE)
@@ -413,7 +413,7 @@ All underlying libraries (Chart.js, TanStack Table, etc.) are included as transi
 
 ## 🎯 Philosophy
 
-The loadout system follows these principles:
+The rigs system follows these principles:
 
 1. **Components are npm packages** - Easy to install, version, and distribute
 2. **Not rendering engines** - Just convenience wrappers
@@ -424,7 +424,7 @@ The loadout system follows these principles:
 
 ## 🚀 Examples
 
-- [**Dashboard Example**](../../examples/loadout-dashboard/README.md) - Analytics dashboard with charts and tables
+- [**Dashboard Example**](../../examples/rigs-dashboard/README.md) - Analytics dashboard with charts and tables
 - [**Custom Component Example**](../../examples/custom-component/README.md) - How to create your own wrappers
 
 ## 🤝 Contributing

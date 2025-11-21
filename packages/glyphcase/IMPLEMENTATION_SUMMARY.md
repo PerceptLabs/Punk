@@ -5,7 +5,7 @@
 A complete **Active Capsule reactive database** with embedded **Lua 5.4 runtime** for the Punk Framework, implementing all specifications from:
 
 - `GLYPHCASE_INTERNALS.md` - Active Capsule architecture
-- `GLYPHCASE_SKILLS_SPEC.md` - Skill system integration
+- `GLYPHCASE_SKILLS_SPEC.md` - Mod system integration
 - `LUA_RUNTIME.md` - Lua runtime specifications
 
 ## Architecture
@@ -13,7 +13,7 @@ A complete **Active Capsule reactive database** with embedded **Lua 5.4 runtime*
 ```
 ┌─────────────────────────────────────┐
 │     Lua Scripts / React UI          │
-│  (Skills, Components, Handlers)     │
+│  (Mods, Components, Handlers)     │
 └──────────────┬──────────────────────┘
                │
 ┌──────────────▼──────────────────────┐
@@ -44,7 +44,7 @@ A complete **Active Capsule reactive database** with embedded **Lua 5.4 runtime*
 
 1. **types.ts** (4,893 bytes)
    - TypeScript interfaces for all system components
-   - Type safety for Active Capsule, Events, Lua, Skills, Sync
+   - Type safety for Active Capsule, Events, Lua, Mods, Sync
 
 2. **events.ts** (2,532 bytes)
    - Event Bus implementation
@@ -74,9 +74,9 @@ A complete **Active Capsule reactive database** with embedded **Lua 5.4 runtime*
    - Scheduler (intervals, timeouts)
    - In-memory cache with TTL
 
-6. **skill.ts** (8,140 bytes)
-   - Skill manager
-   - Load/activate/deactivate skills
+6. **mod.ts** (8,140 bytes)
+   - Mod manager
+   - Load/activate/deactivate mods
    - Lifecycle hooks (on_install, on_activate, on_deactivate)
    - Lua script loading and execution
    - Component and template discovery
@@ -104,9 +104,9 @@ A complete **Active Capsule reactive database** with embedded **Lua 5.4 runtime*
    - Sandboxing tests
    - Lua + Active Capsule integration
 
-2. **example-skill/**
-   - `manifest.json` - Skill metadata
-   - `scripts/init.lua` - Example Lua skill with lifecycle hooks
+2. **example-mod/**
+   - `manifest.json` - Mod metadata
+   - `scripts/init.lua` - Example Lua mod with lifecycle hooks
 
 ### Configuration
 
@@ -179,27 +179,27 @@ await db.executeLua(`
 const result = await db.callLuaFunction('add', 5, 3); // 8
 ```
 
-### 3. Skill System
+### 3. Mod System
 
-✅ **Skill Loading**
+✅ **Mod Loading**
 ```typescript
-const skill = await db.loadSkill('./skills/my-skill');
-await db.activateSkill('my-skill');
+const mod = await db.loadMod('./mods/my-mod');
+await db.activateMod('my-mod');
 ```
 
 ✅ **Lifecycle Hooks**
 ```lua
 function on_install()
-  -- Called when skill is installed
+  -- Called when mod is installed
 end
 
 function on_activate()
-  -- Called when skill is activated
+  -- Called when mod is activated
   glyphcase.watch("users", handle_user_changes)
 end
 
 function on_deactivate()
-  -- Called when skill is deactivated
+  -- Called when mod is deactivated
   scheduler.stop_all()
 end
 ```
@@ -346,9 +346,9 @@ await db.executeLua(`
   end
 `);
 
-// Load skill
-const skill = await db.loadSkill('./skills/my-skill');
-await db.activateSkill('my-skill');
+// Load mod
+const mod = await db.loadMod('./mods/my-mod');
+await db.activateMod('my-mod');
 
 // Clean up
 db.close();
@@ -459,7 +459,7 @@ This implementation provides a **complete, production-ready Active Capsule syste
 
 - ✅ Reactive SQLite database with automatic change detection
 - ✅ Sandboxed Lua 5.4 runtime via WASM
-- ✅ Full skill system with lifecycle hooks
+- ✅ Full mod system with lifecycle hooks
 - ✅ Event-driven architecture
 - ✅ Optional cloud sync
 - ✅ TypeScript type safety

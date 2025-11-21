@@ -1,6 +1,6 @@
 # Dashboard Structure Overview
 
-This document provides a visual overview of the loadout-dashboard example structure.
+This document provides a visual overview of the rigs-dashboard example structure.
 
 ## Component Hierarchy
 
@@ -98,7 +98,7 @@ App (DataContext Provider)
 ## File Organization
 
 ```
-loadout-dashboard/
+rigs-dashboard/
 │
 ├── Configuration Files
 │   ├── package.json           # Dependencies and scripts
@@ -170,7 +170,7 @@ loadout-dashboard/
 ```
 ┌─────────────────────────────────────────────────────────────┐
 │                    PUNK FRAMEWORK DASHBOARD                  │
-│        Demonstrating @punk/extended loadout with...         │
+│        Demonstrating @punk/extended rig with...         │
 └─────────────────────────────────────────────────────────────┘
 
 ┌──────────────────┬──────────────────┬──────────────────────┐
@@ -202,7 +202,7 @@ loadout-dashboard/
 └─────────────────────────────┴───────────────────────────────┘
 
 ┌─────────────────────────────────────────────────────────────┐
-│          Built with Punk Framework Extended Loadout         │
+│          Built with Punk Framework Extended Rig         │
 │  Powered by @punk/component-chart, table, and mermaid       │
 └─────────────────────────────────────────────────────────────┘
 ```
@@ -271,7 +271,7 @@ const dataContext = {
 1. **Declarative UI**: Entire dashboard defined as JSON
 2. **Component Registry**: Types resolved at render time
 3. **Data Binding**: String references to actual data
-4. **Loadout Pattern**: Multiple components from one package
+4. **Rig Pattern**: Multiple components from one package
 5. **Production Quality**: Error handling, loading, responsive
 6. **Real-world Data**: Realistic metrics and visualizations
 7. **Clean Architecture**: Separation of schema, data, and rendering

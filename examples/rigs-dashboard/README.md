@@ -1,6 +1,6 @@
-# Punk Loadout Dashboard Example
+# Punk Rigs Dashboard Example
 
-A production-quality example demonstrating the **Punk Framework Extended Loadout** with Chart, Table, and Mermaid components.
+A production-quality example demonstrating the **Punk Framework Extended Rig** with Chart, Table, and Mermaid components.
 
 ## Overview
 
@@ -13,9 +13,9 @@ This example showcases how to build a complete analytics dashboard using Punk's 
 - **Responsive layouts** with production-ready styling
 - **Error handling** and loading states
 
-## What is a Loadout?
+## What is a Rig?
 
-A **loadout** is a curated collection of pre-wrapped React component libraries bundled as an npm package. The `@punk/extended` loadout includes:
+A **rig** is a curated collection of pre-wrapped React component libraries bundled as an npm package. The `@punk/extended` rig includes:
 
 - `@punk/component-chart` - Charts powered by Chart.js
 - `@punk/component-table` - Tables powered by TanStack Table
@@ -47,7 +47,7 @@ pnpm preview
 ## Project Structure
 
 ```
-loadout-dashboard/
+rigs-dashboard/
 ├── src/
 │   ├── main.tsx          # React entry point, imports @punk/extended
 │   ├── App.tsx           # Main app component with PunkRenderer
@@ -62,9 +62,9 @@ loadout-dashboard/
 
 ## How It Works
 
-### 1. Import the Loadout
+### 1. Import the Rig
 
-In `main.tsx`, we import the extended loadout which auto-registers all components:
+In `main.tsx`, we import the extended rig which auto-registers all components:
 
 ```typescript
 import '@punk/extended'
@@ -434,7 +434,7 @@ const chartData = useMemo(() => processData(rawData), [rawData])
 ## Learn More
 
 - **Punk Framework Docs**: See `/packages/core/README.md`
-- **Extended Loadout**: See `/packages/extended/README.md`
+- **Extended Rig**: See `/packages/extended/README.md`
 - **Custom Components**: See `/examples/custom-component/`
 - **Chart.js Docs**: https://www.chartjs.org/docs/
 - **TanStack Table**: https://tanstack.com/table/latest
@@ -444,7 +444,7 @@ const chartData = useMemo(() => processData(rawData), [rawData])
 
 1. **Explore SynthPunk**: Generate schemas with AI
 2. **Try Mohawk**: Visually edit schemas
-3. **Build Custom Loadout**: Create your own component collection
+3. **Build Custom Rig**: Create your own component collection
 4. **Deploy**: Build and deploy to Vercel/Netlify
 
 ## License

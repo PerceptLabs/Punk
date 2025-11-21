@@ -2,7 +2,7 @@
  * Dashboard Schema Definition
  *
  * This file defines the complete dashboard layout using Punk's JSON schema format.
- * It demonstrates how to use the @punk/extended loadout components:
+ * It demonstrates how to use the @punk/extended rig components:
  * - Chart: Data visualization with multiple chart types
  * - Table: Tabular data display with sorting and pagination
  * - Mermaid: Diagram rendering for system architecture
@@ -50,7 +50,7 @@ export const dashboardSchema = {
         {
           type: 'Text',
           props: {
-            content: 'Demonstrating @punk/extended loadout with Chart, Table, and Mermaid components',
+            content: 'Demonstrating @punk/extended rig with Chart, Table, and Mermaid components',
             style: {
               fontSize: '1.1rem',
               color: '#6b7280',
@@ -448,7 +448,7 @@ export const dashboardSchema = {
         {
           type: 'Text',
           props: {
-            content: 'Built with Punk Framework Extended Loadout',
+            content: 'Built with Punk Framework Extended Rig',
             style: {
               fontSize: '1rem',
               color: '#6b7280',

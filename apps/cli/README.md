@@ -30,7 +30,7 @@ Features:
 - Tier selection (Punk, Synthpunk, Atompunk)
 - Backend selection (Encore, tRPC, GlyphCase, etc.)
 - Neon database integration
-- Skills selection (multi-select)
+- Mods selection (multi-select)
 - Git initialization
 
 ### `punk dev`
@@ -74,14 +74,14 @@ Checks:
 - Config schema validation
 - Environment variables
 - Port availability
-- Skill compatibility
+- Mod compatibility
 
 ### `punk add`
 
-Add components, backends, or skills to existing project.
+Add components, backends, or mods to existing project.
 
 ```bash
-punk add skill [name]    # Add a GlyphCase skill
+punk add mod [name]    # Add a GlyphCase mod
 punk add component       # Add a UI component
 punk add backend         # Add or change backend
 ```
@@ -189,10 +189,10 @@ go test ./...
 - `c` - Clear current pane
 - `q` - Quit
 
-### Skill Browser
-- `↑↓` - Navigate skills
+### Mod Browser
+- `↑↓` - Navigate mods
 - `/` - Filter/search
-- `Enter` - Install selected skill
+- `Enter` - Install selected mod
 - `q` - Quit
 
 ## Contributing

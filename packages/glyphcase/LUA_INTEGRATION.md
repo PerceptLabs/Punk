@@ -182,17 +182,17 @@ cache.clear()
 
 ### 3. Reactive Lifecycle Hooks
 
-**Implementation**: Skills can define lifecycle hooks that are automatically called:
+**Implementation**: Mods can define lifecycle hooks that are automatically called:
 
 ```lua
 -- scripts/hooks.lua
 
 function on_install()
-  print("Installing skill...")
+  print("Installing mod...")
 
   -- Initialize database schema
   glyphcase.execute([[
-    CREATE TABLE IF NOT EXISTS skill_data (
+    CREATE TABLE IF NOT EXISTS mod_data (
       id INTEGER PRIMARY KEY,
       key TEXT UNIQUE,
       value JSON
@@ -200,14 +200,14 @@ function on_install()
   ]])
 
   -- Insert default data
-  glyphcase.insert("skill_data", {
+  glyphcase.insert("mod_data", {
     key = "installed_at",
     value = os.time()
   })
 end
 
 function on_activate()
-  print("Activating skill...")
+  print("Activating mod...")
 
   -- Set up watchers
   glyphcase.watch("users", handle_user_changes)
@@ -216,11 +216,11 @@ function on_activate()
   scheduler.every("1h", sync_external_data)
 
   -- Register event handlers
-  actionbus.register("skill:action", handle_action)
+  actionbus.register("mod:action", handle_action)
 end
 
 function on_deactivate()
-  print("Deactivating skill...")
+  print("Deactivating mod...")
 
   -- Clean up
   scheduler.stop_all()
@@ -230,7 +230,7 @@ end
 
 ### 4. Data Change Reactions
 
-**Implementation**: Skills can react to database changes:
+**Implementation**: Mods can react to database changes:
 
 ```lua
 -- scripts/reactive.lua
@@ -385,9 +385,9 @@ db.getEventBus().on('lua:result', (data) => {
 });
 ```
 
-## Complete Skill Example
+## Complete Mod Example
 
-See `/home/user/Punk/packages/glyphcase/examples/skill-example.lua` for a comprehensive example demonstrating:
+See `/home/user/Punk/packages/glyphcase/examples/mod-example.lua` for a comprehensive example demonstrating:
 
 - ✅ Lifecycle hooks (on_install, on_activate, on_deactivate)
 - ✅ Data change handlers (on_data_changed)
@@ -405,7 +405,7 @@ See `/home/user/Punk/packages/glyphcase/examples/skill-example.lua` for a compre
 - **Size**: ~500KB (wasmoon WASM)
 - **Initialization**: ~50ms (first time), ~10ms (subsequent)
 - **Function calls**: ~0.1ms (JS → Lua → JS)
-- **Memory**: ~5MB (typical skill)
+- **Memory**: ~5MB (typical mod)
 
 ### Database Operations from Lua
 - **Query**: Same as TypeScript (0.5ms indexed, 2ms full scan)

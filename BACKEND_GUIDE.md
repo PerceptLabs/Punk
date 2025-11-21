@@ -686,4 +686,4 @@ docker run -p 4000:4000 my-app
 
 ---
 
-[Back to README](README.md) • [Skills Guide](SKILLS_GUIDE.md) • [API Reference](API_REFERENCE.md)
+[Back to README](README.md) • [Mods Guide](SKILLS_GUIDE.md) • [API Reference](API_REFERENCE.md)

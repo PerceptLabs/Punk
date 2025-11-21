@@ -6,8 +6,8 @@
 
 - **Reactive Database**: SQLite with automatic change detection via triggers
 - **Event-Driven**: Real-time event emission to subscribers
-- **Lua Runtime**: Sandboxed Lua 5.4 environment via wasmoon (WASM)
-- **Skill System**: Modular plugin architecture with Lua scripts
+- **Trinity Runtime**: Polyglot execution environment (Lua + Txiki.js + WAMR)
+- **Mod System**: Modular plugin architecture with Lua scripts
 - **Local-First**: All data stored locally in SQLite
 - **Optional Sync**: Bidirectional cloud sync with conflict resolution
 - **TypeScript**: Full type safety and IntelliSense support
@@ -85,7 +85,7 @@ await db.executeLua(`
 `);
 ```
 
-### Reactive Lua Skills
+### Reactive Lua Mods
 
 ```lua
 -- scripts/reactive.lua
@@ -101,9 +101,9 @@ function on_data_changed(table_name, operation, row)
   end
 end
 
--- Called when skill activates
+-- Called when mod activates
 function on_activate()
-  print("Skill activated!")
+  print("Mod activated!")
 
   -- Watch for changes
   glyphcase.watch("users", function(events)
@@ -184,21 +184,21 @@ cache.get("key")
 cache.delete("key")
 ```
 
-### Skills
+### Mods
 
 ```typescript
-// Load skill from directory
-const skill = await db.loadSkill('./skills/my-skill');
+// Load mod from directory
+const mod = await db.loadMod('./mods/my-mod');
 
-// Activate skill
-await db.activateSkill('my-skill');
+// Activate mod
+await db.activateMod('my-mod');
 
-// Deactivate skill
-await db.deactivateSkill('my-skill');
+// Deactivate mod
+await db.deactivateMod('my-mod');
 
-// Call Lua function in skill
-const result = await db.getSkillManager()
-  .callSkillFunction('my-skill', 'process_data', { foo: 'bar' });
+// Call Lua function in mod
+const result = await db.getModManager()
+  .callModFunction('my-mod', 'process_data', { foo: 'bar' });
 ```
 
 ### Sync
@@ -219,11 +219,57 @@ const result = await db.sync();
 console.log(`Pushed: ${result.pushed}, Pulled: ${result.pulled}`);
 ```
 
+## Trinity Runtime
+
+Mods execute in the **Trinity Runtime**, a polyglot execution environment:
+
+| Component | Role | Description |
+|-----------|------|-------------|
+| **Lua** | Brain | Scripting and logic orchestration |
+| **Txiki.js** | Hands | I/O, networking, async operations |
+| **WAMR** | Muscle | WebAssembly Micro Runtime for performance-critical code |
+
+### How Mods Use Trinity Runtime
+
+Mods can leverage any combination of these runtimes based on their needs:
+
+```lua
+-- Simple mod using only Lua
+function on_data_changed(table_name, operation, row)
+  if table_name == "users" then
+    print("User changed: " .. row.name)
+  end
+end
+
+-- Advanced mod using all three runtimes
+function process_heavy_data(url)
+  -- Txiki.js for I/O (networking)
+  local data = txiki.fetch(url)
+
+  -- WAMR for performance (WebAssembly)
+  local result = wamr.execute("transform_module", data)
+
+  -- Lua for orchestration
+  glyphcase.insert("results", { data = result })
+end
+```
+
+**Benefits:**
+- **Flexibility** - Choose the right tool for each task
+- **Performance** - WAMR for compute-intensive operations
+- **Simplicity** - Lua for readable orchestration logic
+- **Capability** - Txiki.js for modern async I/O
+
 ## Architecture
 
 ```
 ┌─────────────────────────────┐
 │   Lua Scripts / React UI    │
+└─────────────┬───────────────┘
+              │
+┌─────────────▼───────────────┐
+│      Trinity Runtime        │
+│  (Lua + Txiki.js + WAMR)    │
 └─────────────┬───────────────┘
               │
 ┌─────────────▼───────────────┐
@@ -244,7 +290,7 @@ console.log(`Pushed: ${result.pushed}, Pulled: ${result.pulled}`);
 ## Documentation
 
 - [GLYPHCASE_INTERNALS.md](../../GLYPHCASE_INTERNALS.md) - Technical deep dive
-- [GLYPHCASE_SKILLS_SPEC.md](../../GLYPHCASE_SKILLS_SPEC.md) - Skill system guide
+- [GLYPHCASE_MODS_SPEC.md](../../GLYPHCASE_MODS_SPEC.md) - Mod system guide
 - [LUA_RUNTIME.md](../../LUA_RUNTIME.md) - Lua runtime specification
 
 ## License

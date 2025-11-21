@@ -223,7 +223,7 @@ MIT
 
 - `@punk/puck` - Punk UI renderer
 - `@punk/pink` - Design token system
-- `@punk/glyphcase` - Skills management system
+- `@punk/glyphcase` - Mods management system
 - `@punk/mohawk` - Visual builder
 
 ---

@@ -17,7 +17,7 @@ type ProjectConfig struct {
 	Tier         string
 	Backend      string
 	UseNeon      bool
-	Skills       []string
+	Mods       []string
 	InitGit      bool
 	PortFrontend int
 	PortBackend  int
@@ -56,9 +56,9 @@ func GenerateProject(config ProjectConfig) error {
 		}
 	}
 
-	// Generate skill files
-	if err := generateSkillFiles(projectPath, config); err != nil {
-		return fmt.Errorf("failed to generate skill files: %w", err)
+	// Generate mod files
+	if err := generateModFiles(projectPath, config); err != nil {
+		return fmt.Errorf("failed to generate mod files: %w", err)
 	}
 
 	// Initialize git if requested
@@ -77,7 +77,7 @@ func generateBaseStructure(projectPath string, config ProjectConfig) error {
 		"frontend/src",
 		"backend",
 		"shared",
-		"skills",
+		"mods",
 	}
 
 	for _, dir := range dirs {
@@ -226,18 +226,18 @@ func generateGlyphCaseBackend(projectPath string, config ProjectConfig) error {
 	return nil
 }
 
-func generateSkillFiles(projectPath string, config ProjectConfig) error {
-	for _, skill := range config.Skills {
-		skillDir := filepath.Join(projectPath, "skills", skill)
-		if err := os.MkdirAll(skillDir, 0755); err != nil {
+func generateModFiles(projectPath string, config ProjectConfig) error {
+	for _, mod := range config.Mods {
+		modDir := filepath.Join(projectPath, "mods", mod)
+		if err := os.MkdirAll(modDir, 0755); err != nil {
 			return err
 		}
 
-		// Create skill placeholder
-		skillContent := fmt.Sprintf("// Skill: %s\n// TODO: Implement skill\n", skill)
+		// Create mod placeholder
+		modContent := fmt.Sprintf("// Mod: %s\n// TODO: Implement mod\n", mod)
 		if err := os.WriteFile(
-			filepath.Join(skillDir, "index.ts"),
-			[]byte(skillContent),
+			filepath.Join(modDir, "index.ts"),
+			[]byte(modContent),
 			0644,
 		); err != nil {
 			return err
@@ -259,7 +259,7 @@ func renderPunkConfig(config ProjectConfig) string {
   tier: "{{.Tier}}",
   backend: "{{.Backend}}",
   neon: {{.UseNeon}},
-  skills: [{{range .Skills}}"{{.}}",{{end}}],
+  mods: [{{range .Mods}}"{{.}}",{{end}}],
   ports: {
     frontend: {{.PortFrontend}},
     backend: {{.PortBackend}},
@@ -302,10 +302,10 @@ punk build
 
 - **Tier:** %s
 - **Backend:** %s
-- **Skills:** %s
+- **Mods:** %s
 
 Built with ❤️ using Punk Framework
-`, config.Name, config.Tier, config.Backend, strings.Join(config.Skills, ", "))
+`, config.Name, config.Tier, config.Backend, strings.Join(config.Mods, ", "))
 }
 
 func renderFrontendPackageJSON(config ProjectConfig) string {

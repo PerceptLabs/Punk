@@ -91,12 +91,13 @@ Beautiful, colorful CLI built with Go + Charm
 - Interactive TUI
 - Live reload
 - Template composition
-- Skill system
+- Mod system
 
 ### 🧩 Extensible Architecture
-Modular skill system via GlyphCase
+Modular mod system via GlyphCase
 - Portable plugins (.gcasex files)
-- Community marketplace
+- **Depot** marketplace for Rigs (UI components) and Mods (logic bundles)
+- **Trinity Runtime** for Mod execution (Lua + Txiki.js + WAMR)
 - Custom integrations
 - Self-contained dependencies
 
@@ -133,7 +134,7 @@ punk create my-app --tier synthpunk --backend encore-ts
 Follow the prompts to choose:
 - **Tier** (Punk / Synthpunk / Atompunk)
 - **Backend** (None / Encore / tRPC / GlyphCase)
-- **Skills** (Optional extensions)
+- **Mods** (Optional extensions)
 
 ### Start Development
 
@@ -197,7 +198,7 @@ Punk is organized into three progressive tiers:
 - Beautiful terminal interface
 - Scaffolds projects with best practices
 - Template composition system
-- Skill management
+- Mod management
 - Built with Go + Charm
 
 **2. Mohawk** (For Builders)
@@ -233,11 +234,29 @@ Punk is organized into three progressive tiers:
 - **GlyphCase** - Local-first SQLite
 - **Manifest** - YAML-based backend
 
+### Trinity Runtime
+
+Mods execute in the Trinity Runtime, a polyglot execution environment:
+
+- **Lua** (Brain) - Scripting and logic orchestration
+- **Txiki.js** (Hands) - I/O, networking, async operations
+- **WAMR** (Muscle) - WebAssembly for performance-critical code
+
+Mods can leverage any combination of these runtimes based on their needs.
+
+### Depot
+
+The Depot is the marketplace for sharing and discovering:
+- **Rigs** - UI component collections
+- **Mods** - Logic and capability bundles
+
+Browse at https://depot.punk.dev (coming soon)
+
 ---
 
-## Component Loadout System
+## Component Rigs
 
-Punk includes an **extended component loadout** - 8 pre-wrapped component libraries ready to use:
+Punk includes an **extended component rig** - 8 pre-wrapped component libraries ready to use:
 
 ```typescript
 import '@punk/extended' // Auto-registers all components
@@ -267,7 +286,7 @@ const schema = {
 **Learn more:** [@punk/extended documentation](packages/extended/README.md)
 
 **Examples:**
-- [Dashboard Example](examples/loadout-dashboard/README.md) - Charts, tables, and diagrams
+- [Dashboard Example](examples/rigs-dashboard/README.md) - Charts, tables, and diagrams
 - [Custom Component Example](examples/custom-component/README.md) - Create your own wrappers
 
 ---
@@ -286,12 +305,12 @@ const schema = {
 
 ### Guides
 - [Backend Guide](BACKEND_GUIDE.md) - Backend options & setup
-- [Skills Guide](SKILLS_GUIDE.md) - Creating & using skills
+- [Mods Guide](MODS_GUIDE.md) - Creating & using mods
 - [Contributing](CONTRIBUTING.md) - How to contribute
 
 ### Examples
 - [Hello World](examples/hello-world) - Minimal example
-- [Loadout Dashboard](examples/loadout-dashboard) - Extended components showcase
+- [Rigs Dashboard](examples/rigs-dashboard) - Extended components showcase
 - [Custom Component](examples/custom-component) - Create custom wrappers
 - [Todo App](docs/examples/todo-app) - Classic todo with Synthpunk
 - [Dashboard](docs/examples/dashboard) - Data visualization
@@ -313,7 +332,7 @@ const schema = {
 | **Self-Hosting** | ✅ | ❌ | ❌ | ❌ |
 | **CLI Tool** | ✅ Beautiful TUI | ❌ | ❌ | ❌ |
 | **Open Source** | ✅ MIT | ❌ | ❌ | ❌ |
-| **Extensibility** | Skills system | ❌ | ❌ | ❌ |
+| **Extensibility** | Mods system | ❌ | ❌ | ❌ |
 
 ---
 
@@ -344,11 +363,11 @@ authEndpoint({
 ```
 Templates are peer-reviewed, security-hardened, and prevent common vulnerabilities.
 
-### 🧩 Skill System
+### 🧩 Mod System
 ```bash
-punk add skill supabase-backend
-punk add skill docx-generator
-punk add skill pdf-processor
+punk add mod supabase-backend
+punk add mod docx-generator
+punk add mod pdf-processor
 ```
 Portable plugins packaged as GlyphCase (.gcasex) files with scripts and knowledge.
 
@@ -456,8 +475,12 @@ We welcome contributions! See [CONTRIBUTING.md](CONTRIBUTING.md) for:
 - Creating pull requests
 - Coding standards
 
-### Skill Marketplace
-Browse and publish skills at [https://skills.punk.dev](https://skills.punk.dev)
+### Depot
+The Depot is the marketplace for sharing and discovering:
+- **Rigs** - UI component collections
+- **Mods** - Logic and capability bundles
+
+Browse at [https://depot.punk.dev](https://depot.punk.dev) (coming soon)
 
 ---
 
@@ -468,7 +491,7 @@ Browse and publish skills at [https://skills.punk.dev](https://skills.punk.dev)
 - ✅ Schema-based rendering (@punk/core)
 - ✅ AI generation (Synthpunk)
 - ✅ Backend templates (Atompunk)
-- ✅ GlyphCase skill system
+- ✅ GlyphCase mod system
 - ✅ Multiple backend adapters
 
 ### v1.1 (Q1 2026)
@@ -476,7 +499,8 @@ Browse and publish skills at [https://skills.punk.dev](https://skills.punk.dev)
 - 🔲 Visual schema editor
 - 🔲 Real-time collaboration
 - 🔲 One-click deployment
-- 🔲 Skill marketplace launch
+- 🔲 **Depot marketplace launch** (Rigs & Mods)
+- 🔲 **Trinity Runtime** (Lua + Txiki.js + WAMR)
 
 ### v1.2 (Q2 2026)
 - 🔲 Mobile app support (React Native)

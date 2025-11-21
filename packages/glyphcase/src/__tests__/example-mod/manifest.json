@@ -1,8 +1,8 @@
 {
-  "id": "example-skill",
-  "name": "Example Skill",
+  "id": "example-mod",
+  "name": "Example Mod",
   "version": "1.0.0",
-  "description": "Example skill demonstrating GlyphCase features",
+  "description": "Example mod demonstrating GlyphCase features",
   "author": "Punk Framework",
   "extends": {
     "components": ["ExampleComponent"],

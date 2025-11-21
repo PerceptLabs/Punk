@@ -111,12 +111,12 @@ Documentation improvements are always welcome:
 - Improve explanations
 - Add diagrams
 
-### Creating Skills
+### Creating Mods
 
-Build and publish skills to extend Punk:
-- See [Skills Guide](SKILLS_GUIDE.md)
-- Follow skill best practices
-- Submit to marketplace
+Build and publish mods to extend Punk:
+- See [Mods Guide](SKILLS_GUIDE.md)
+- Follow mod best practices
+- Submit to the Depot (https://depot.punk.dev)
 
 ### Answering Questions
 
@@ -216,7 +216,7 @@ punk/
 │   ├── base/                # Base template
 │   ├── layers/              # Tier layers
 │   ├── backends/            # Backend templates
-│   └── skills/              # Skill templates
+│   └── mods/              # Mod templates
 │
 ├── docs/                    # Documentation
 │   └── examples/            # Example projects

@@ -67,10 +67,10 @@ export interface LuaConfig {
 }
 
 // ============================================================================
-// Skill Types
+// Mod Types
 // ============================================================================
 
-export interface SkillManifest {
+export interface ModManifest {
   id: string;
   name: string;
   version: string;
@@ -92,30 +92,30 @@ export interface SkillManifest {
   dependencies?: Record<string, string>;
 }
 
-export interface SkillComponent {
+export interface ModComponent {
   name: string;
   path: string;
   type: 'punk' | 'tsx' | 'jsx';
 }
 
-export interface SkillTemplate {
+export interface ModTemplate {
   name: string;
   path: string;
   type: 'api' | 'worker' | 'cron';
 }
 
-export interface Skill {
+export interface Mod {
   id: string;
   name: string;
   version: string;
-  manifest: SkillManifest;
+  manifest: ModManifest;
   luaScripts: Map<string, string>;
-  components: SkillComponent[];
-  templates: SkillTemplate[];
+  components: ModComponent[];
+  templates: ModTemplate[];
   dbPath?: string;
 }
 
-export type SkillHook = 'on_install' | 'on_activate' | 'on_deactivate';
+export type ModHook = 'on_install' | 'on_activate' | 'on_deactivate';
 
 // ============================================================================
 // Sync Types

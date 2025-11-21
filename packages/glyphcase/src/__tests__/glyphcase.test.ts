@@ -1,6 +1,6 @@
 /**
  * GlyphCase Integration Tests
- * Tests for Active Capsule, Lua Runtime, and Skill System
+ * Tests for Active Capsule, Lua Runtime, and Mod System
  */
 
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';

@@ -63,7 +63,7 @@ punk create <name> [options]
 **Options:**
 - `--tier <punk|synthpunk|atompunk>` - Select tier
 - `--backend <none|encore-ts|encore|trpc|glyphcase|manifest>` - Select backend
-- `--skills <skill1,skill2>` - Install skills
+- `--mods <mod1,mod2>` - Install mods
 - `--package-manager <npm|yarn|pnpm|bun>` - Package manager
 - `--git` - Initialize git repository
 - `--no-git` - Skip git initialization
@@ -83,7 +83,7 @@ punk create my-app
 punk create my-app \
   --tier synthpunk \
   --backend encore-ts \
-  --skills shadcn-components,supabase-backend \
+  --mods shadcn-components,supabase-backend \
   --package-manager pnpm \
   --git \
   --examples
@@ -220,20 +220,20 @@ punk upgrade deps
 
 ---
 
-## Skill Commands
+## Mod Commands
 
-### `punk skills`
+### `punk mods`
 
-Manage skills (plugins).
+Manage mods (plugins).
 
 **Subcommands:**
 
-#### `punk skills list`
+#### `punk mods list`
 
-List installed and available skills.
+List installed and available mods.
 
 ```bash
-punk skills list [options]
+punk mods list [options]
 ```
 
 **Options:**
@@ -241,26 +241,26 @@ punk skills list [options]
 - `--available` - Show only available
 - `--json` - Output as JSON
 
-#### `punk skills search`
+#### `punk mods search`
 
-Search for skills.
+Search for mods.
 
 ```bash
-punk skills search <query>
+punk mods search <query>
 ```
 
 **Examples:**
 ```bash
-punk skills search supabase
-punk skills search "pdf generator"
+punk mods search supabase
+punk mods search "pdf generator"
 ```
 
-#### `punk skills install`
+#### `punk mods install`
 
-Install a skill.
+Install a mod.
 
 ```bash
-punk skills install <skill-name>
+punk mods install <mod-name>
 ```
 
 **Options:**
@@ -269,53 +269,53 @@ punk skills install <skill-name>
 
 **Examples:**
 ```bash
-punk skills install shadcn-components
-punk skills install supabase-backend@2.0.0
+punk mods install shadcn-components
+punk mods install supabase-backend@2.0.0
 ```
 
-#### `punk skills uninstall`
+#### `punk mods uninstall`
 
-Uninstall a skill.
+Uninstall a mod.
 
 ```bash
-punk skills uninstall <skill-name>
+punk mods uninstall <mod-name>
 ```
 
-#### `punk skills info`
+#### `punk mods info`
 
-View skill details.
+View mod details.
 
 ```bash
-punk skills info <skill-name>
+punk mods info <mod-name>
 ```
 
-#### `punk skills update`
+#### `punk mods update`
 
-Update installed skills.
+Update installed mods.
 
 ```bash
-punk skills update [skill-name]
+punk mods update [mod-name]
 ```
 
 **Examples:**
 ```bash
-# Update all skills
-punk skills update
+# Update all mods
+punk mods update
 
-# Update specific skill
-punk skills update shadcn-components
+# Update specific mod
+punk mods update shadcn-components
 ```
 
-#### `punk skills create`
+#### `punk mods create`
 
-Create a new skill.
+Create a new mod.
 
 ```bash
-punk skills create [options]
+punk mods create [options]
 ```
 
 **Options:**
-- `--name <name>` - Skill name
+- `--name <name>` - Mod name
 - `--description <desc>` - Description
 - `--extension-point <point>` - Extension point type
 - `--template <template>` - Template to use
@@ -349,12 +349,12 @@ punk add backend encore-ts
 punk add backend glyphcase
 ```
 
-#### `punk add skill`
+#### `punk add mod`
 
-Add a skill (alias for `punk skills install`).
+Add a mod (alias for `punk mods install`).
 
 ```bash
-punk add skill <skill-name>
+punk add mod <mod-name>
 ```
 
 #### `punk add auth`
@@ -597,8 +597,8 @@ export default {
   // Backend configuration
   backend: 'encore-ts',
 
-  // Installed skills
-  skills: [
+  // Installed mods
+  mods: [
     'shadcn-components',
     'supabase-backend'
   ],
