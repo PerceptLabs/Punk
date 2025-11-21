@@ -90,12 +90,50 @@ export interface ConversationMessage {
   timestamp: number
 }
 
+// ========== Mod Types ==========
+
+/**
+ * Capability type for mod capabilities
+ */
+export type ModCapabilityType = 'data' | 'action' | 'query'
+
+/**
+ * A single capability provided by a mod
+ */
+export interface ModCapability {
+  /** Description for AI context */
+  description?: string
+  /** Type of capability */
+  type: ModCapabilityType
+  /** Schema/structure of the capability */
+  schema?: Record<string, unknown>
+}
+
+/**
+ * Definition of a Mod (logic + capability bundle)
+ */
+export interface ModDefinition {
+  /** Mod description for AI context */
+  description?: string
+  /** Available capabilities/data paths */
+  capabilities?: Record<string, ModCapability>
+  /** Runtime data (resolved at render time) */
+  data?: Record<string, unknown>
+}
+
 // ========== Context Types ==========
 
 export interface EpochContext {
   componentRegistry: Map<string, ComponentSchema>
   tokenRegistry: Map<string, DesignToken>
   dataModels: DataModel[]
+
+  /**
+   * Mods: logic + data tools available to the AI.
+   * Keys are mod names, values are structured capability/data trees.
+   */
+  mods: Record<string, ModDefinition>
+
   conversationHistory: ConversationMessage[]
   tokenBudget: number
   tokenUsed: number

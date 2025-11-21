@@ -8,6 +8,7 @@ import {
   DesignToken,
   DataModel,
   TokenBudgetTracker,
+  ModDefinition,
 } from './types'
 import { SYSTEM_PROMPT } from './prompts'
 
@@ -463,15 +464,23 @@ export function buildTokenRegistry(): Map<string, DesignToken> {
 
 /**
  * Create a new Epoch context
+ * @param dataModels - Available data models for binding
+ * @param userPreferences - User preference settings
+ * @param mods - Connected mods (logic + data tools)
  */
 export function createContext(
   dataModels: DataModel[] = [],
-  userPreferences?: EpochContext['userPreferences']
+  userPreferences?: EpochContext['userPreferences'],
+  mods: Record<string, ModDefinition> = {}
 ): EpochContext {
   return {
     componentRegistry: buildComponentRegistry(),
     tokenRegistry: buildTokenRegistry(),
+
+    // Data & logic pillars
     dataModels,
+    mods,
+
     conversationHistory: [],
     tokenBudget: 100000, // Claude Sonnet 4.5 max
     tokenUsed: 0,
@@ -510,6 +519,30 @@ export function calculateTokenBudget(context: EpochContext): TokenBudgetTracker 
 }
 
 /**
+ * Helper: flatten an object tree into dotted paths for docs
+ * e.g., { auth: { user: { name: 'x' } } } -> ["auth.user.name"]
+ */
+function flattenObjectPaths(
+  obj: Record<string, unknown>,
+  prefix = '',
+  maxDepth = 4
+): string[] {
+  if (maxDepth <= 0) return prefix ? [`${prefix}...`] : []
+
+  const result: string[] = []
+  for (const key of Object.keys(obj)) {
+    const value = obj[key]
+    const path = prefix ? `${prefix}.${key}` : key
+    if (value && typeof value === 'object' && !Array.isArray(value)) {
+      result.push(...flattenObjectPaths(value as Record<string, unknown>, path, maxDepth - 1))
+    } else {
+      result.push(path)
+    }
+  }
+  return result
+}
+
+/**
  * Format context for inclusion in prompts
  */
 function formatContextForPrompt(context: EpochContext): string {
@@ -521,6 +554,47 @@ function formatContextForPrompt(context: EpochContext): string {
     output += 'Data Models:\n'
     for (const model of context.dataModels) {
       output += `- ${model.name}: ${Object.keys(model.fields).join(', ')}\n`
+    }
+    output += '\n'
+  }
+
+  // Include connected mods (data & logic tools)
+  if (context.mods && Object.keys(context.mods).length > 0) {
+    output += 'Connected Mods (Data & Logic Tools):\n'
+    for (const modName of Object.keys(context.mods)) {
+      const mod = context.mods[modName]
+      output += `- ${modName}`
+      if (mod.description) {
+        output += `: ${mod.description}`
+      }
+      output += '\n'
+
+      // Document available data paths
+      if (mod.data) {
+        const paths = flattenObjectPaths(mod.data)
+        if (paths.length > 0) {
+          output += `  Available paths:\n`
+          for (const p of paths.slice(0, 10)) {
+            // Limit to 10 paths per mod
+            output += `    - context.mods.${modName}.${p}\n`
+          }
+          if (paths.length > 10) {
+            output += `    ... and ${paths.length - 10} more\n`
+          }
+        }
+      }
+
+      // Document capabilities
+      if (mod.capabilities) {
+        output += `  Capabilities:\n`
+        for (const [capName, cap] of Object.entries(mod.capabilities)) {
+          output += `    - ${capName} (${cap.type})`
+          if (cap.description) {
+            output += `: ${cap.description}`
+          }
+          output += '\n'
+        }
+      }
     }
     output += '\n'
   }

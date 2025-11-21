@@ -81,6 +81,24 @@ Reference patterns:
 - Component props: {props.propertyName}
 - Array items: {item.propertyName} (within list contexts)
 - Nested: {context.user.profile.name}
+- Mods data: {context.mods.modName.path}
+
+## Mods (Data & Logic Tools)
+
+You may have access to connected Mods. These are your Data Tools.
+
+CRITICAL RULES:
+- Do NOT hallucinate variable names or paths
+- Only bind to mods and paths that are EXPLICITLY listed in the context
+- Bind data using the format: \`{context.mods.[modName].[path]}\`
+- Example: If the "auth" mod is present, bind user name as \`{context.mods.auth.user.name}\`
+
+If a requested binding or action is not available in the listed mods, you MUST say so and avoid guessing.
+
+Mod types:
+- **data**: Read-only data sources (e.g., user info, settings)
+- **action**: Executable actions (e.g., save, delete, navigate)
+- **query**: Data queries (e.g., fetch records, search)
 
 ## Accessibility Requirements
 
@@ -313,6 +331,30 @@ export function buildUserMessage(
     message += '\n'
   }
 
+  // Add connected mods context
+  if (context.mods && Object.keys(context.mods).length > 0) {
+    message += `Connected Mods (use these for data binding):\n`
+    for (const [modName, mod] of Object.entries(context.mods)) {
+      message += `- ${modName}`
+      if (mod.description) {
+        message += `: ${mod.description}`
+      }
+      message += '\n'
+
+      // List capabilities
+      if (mod.capabilities) {
+        for (const [capName, cap] of Object.entries(mod.capabilities)) {
+          message += `    ${cap.type}: ${capName}`
+          if (cap.description) {
+            message += ` - ${cap.description}`
+          }
+          message += '\n'
+        }
+      }
+    }
+    message += '\n'
+  }
+
   // Add user preferences if available
   if (context.userPreferences) {
     message += `User Preferences:\n`
@@ -324,6 +366,15 @@ export function buildUserMessage(
     }
     if (context.userPreferences.variant) {
       message += `- Variant: ${context.userPreferences.variant}\n`
+    }
+    message += '\n'
+  }
+
+  // Add conversation history if requested
+  if (options.includeHistory && context.conversationHistory?.length) {
+    message += 'Previous Conversation:\n'
+    for (const turn of context.conversationHistory) {
+      message += `- ${turn.role.toUpperCase()}: ${turn.content.substring(0, 200)}${turn.content.length > 200 ? '...' : ''}\n`
     }
     message += '\n'
   }
