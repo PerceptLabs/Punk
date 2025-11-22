@@ -1,0 +1,158 @@
+========================================
+EXAMPLE: WHAT THE AI NOW SEES
+========================================
+
+When Synthpunk generates schemas, the AI receives this context:
+
+----------------------------------------
+CONTEXT SECTION
+----------------------------------------
+
+Available Components:
+Container, Box, Text, Button, Input, Select, Form, FormField, DataGrid, Card, Badge, Avatar, Modal, Tabs, Stack, Chart, Table, Mermaid, RichText, Code, FileDrop, DatePicker, Command
+
+Components with A11y Profiles:
+- Chart:
+  role: img
+  required: [label]
+  optional: [description]
+  hint: This is a chart. Provide a short label describing the chart type and data (e.g., "Sales trend for 2024"), and an optional detailed description for screen readers.
+
+- Table:
+  role: table
+  required: [caption]
+  optional: [summary]
+  hint: This is a data table. Provide a caption describing what the table contains (e.g., "Customer list"), and an optional summary explaining the table structure for screen readers.
+
+- Command:
+  role: combobox
+  required: [label]
+  optional: []
+  hint: This is a command palette/combobox input. Provide a label describing the search function (e.g., "Search commands" or "Quick action finder").
+
+- RichText:
+  role: textbox
+  required: [label]
+  optional: [description]
+  hint: This is a rich text editor. Provide a label describing the content being edited (e.g., "Message body" or "Article content"), and an optional description with usage hints.
+
+- Code:
+  role: code
+  required: [label]
+  optional: [description]
+  hint: This is a code block or code editor. Provide a label describing the code (e.g., "TypeScript example" or "API response"), and an optional description of what the code does.
+
+- Mermaid:
+  role: img
+  required: [label]
+  optional: [description]
+  hint: This is a Mermaid diagram. Provide a short label describing the diagram type (e.g., "User authentication flow diagram"), and a detailed description explaining the diagram content for screen readers.
+
+- FileDrop:
+  role: button
+  required: [label]
+  optional: [description]
+  hint: This is a file drop zone. Provide a label describing the upload action (e.g., "Upload profile image" or "Drop files here"), and an optional description with file type restrictions.
+
+- DatePicker:
+  role: combobox
+  required: [label]
+  optional: [description]
+  hint: This is a date picker input. Provide a label describing the date field (e.g., "Start date" or "Birth date"), and an optional description with format or constraints.
+
+
+----------------------------------------
+SYSTEM PROMPT SECTION
+----------------------------------------
+
+## Accessibility Metadata (Rig A11y Profiles)
+
+Some components (called Rigs) have accessibility requirements defined in their a11yProfile.
+
+**Rules:**
+1. When creating a schema node with a type that has an a11y profile (e.g., Chart, Table, Command, Mermaid):
+   - You MUST add an a11y object to that node
+   - You MUST populate all fields listed in the profile's required metadata (e.g., label, caption)
+   - Use the component's props, data, and context to infer meaningful, human-readable text
+   - Generate labels that describe the purpose and content, not just "chart" or "table"
+
+2. Optional fields (listed in the profile's optional metadata) should be added when they improve clarity for screen reader users.
+
+3. Never add raw aria-* props to component props. Always use the a11y object instead.
+
+4. Use the profile's hint field to understand what makes a good label for that component type.
+
+**Example:**
+{
+  "type": "Chart",
+  "props": {
+    "type": "bar",
+    "data": "{context.sales}"
+  },
+  "a11y": {
+    "label": "Monthly sales bar chart",
+    "description": "Shows sales increasing from 100 in January to 150 in February"
+  }
+}
+
+**Example:**
+{
+  "type": "Table",
+  "props": {
+    "data": "{context.users}",
+    "columns": [
+      {"key": "name", "label": "Name"},
+      {"key": "email", "label": "Email"}
+    ]
+  },
+  "a11y": {
+    "caption": "User directory",
+    "summary": "Table showing user names and email addresses with sortable columns"
+  }
+}
+
+
+----------------------------------------
+RESULT: AI GENERATES ACCESSIBLE SCHEMAS
+----------------------------------------
+
+User: "Show sales data in a chart and table"
+
+AI generates:
+{
+  "type": "Container",
+  "props": {"padding": "lg"},
+  "children": [
+    {
+      "type": "Chart",
+      "props": {
+        "type": "line",
+        "data": "{context.sales}"
+      },
+      "a11y": {
+        "label": "Sales trend line chart",
+        "description": "Line chart showing monthly sales from January to December 2024"
+      }
+    },
+    {
+      "type": "Table",
+      "props": {
+        "data": "{context.salesData}",
+        "columns": [
+          {"key": "month", "label": "Month"},
+          {"key": "amount", "label": "Sales Amount"}
+        ]
+      },
+      "a11y": {
+        "caption": "Monthly sales breakdown",
+        "summary": "Table showing sales amounts for each month with sortable columns"
+      }
+    }
+  ]
+}
+
+✅ Notice: The AI automatically generated:
+   - Meaningful labels based on data context
+   - Required a11y fields (label for Chart, caption for Table)
+   - Optional description fields to improve screen reader experience
+   - No manual post-processing needed!

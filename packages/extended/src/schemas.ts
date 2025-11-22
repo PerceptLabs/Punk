@@ -12,7 +12,8 @@ import { CodePropsSchema, CodeMeta } from '@punk/component-code'
 import { FileDropPropsSchema, FileDropMeta } from '@punk/component-filedrop'
 import { DatePickerPropsSchema, DatePickerMeta } from '@punk/component-date'
 import { CommandPropsSchema, CommandMeta } from '@punk/component-command'
-import type { ComponentMeta } from '@punk/core'
+import type { ComponentMeta, RigA11yProfile } from '@punk/core'
+import { getRigA11yProfile } from '@punk/core'
 
 /**
  * Component schema entry for SynthPunk
@@ -32,6 +33,9 @@ export interface ExtendedComponentEntry {
 
   /** Component metadata */
   meta: ComponentMeta
+
+  /** Accessibility profile (for AI generation guidance) */
+  a11yProfile?: RigA11yProfile
 
   /** Whether component accepts children */
   children?: boolean
@@ -57,6 +61,7 @@ export function buildExtendedComponentRegistry(): Map<
         icon: ChartMeta.icon,
         props: ChartPropsSchema,
         meta: ChartMeta,
+        a11yProfile: getRigA11yProfile('Chart'),
         children: false,
       },
     ],
@@ -68,6 +73,7 @@ export function buildExtendedComponentRegistry(): Map<
         icon: TableMeta.icon,
         props: TablePropsSchema,
         meta: TableMeta,
+        a11yProfile: getRigA11yProfile('Table'),
         children: false,
       },
     ],
@@ -79,6 +85,7 @@ export function buildExtendedComponentRegistry(): Map<
         icon: MermaidMeta.icon,
         props: MermaidPropsSchema,
         meta: MermaidMeta,
+        a11yProfile: getRigA11yProfile('Mermaid'),
         children: false,
       },
     ],
@@ -90,6 +97,7 @@ export function buildExtendedComponentRegistry(): Map<
         icon: RichTextMeta.icon,
         props: RichTextPropsSchema,
         meta: RichTextMeta,
+        a11yProfile: getRigA11yProfile('RichText'),
         children: false,
       },
     ],
@@ -101,6 +109,7 @@ export function buildExtendedComponentRegistry(): Map<
         icon: CodeMeta.icon,
         props: CodePropsSchema,
         meta: CodeMeta,
+        a11yProfile: getRigA11yProfile('Code'),
         children: false,
       },
     ],
@@ -112,6 +121,7 @@ export function buildExtendedComponentRegistry(): Map<
         icon: FileDropMeta.icon,
         props: FileDropPropsSchema,
         meta: FileDropMeta,
+        a11yProfile: getRigA11yProfile('FileDrop'),
         children: false,
       },
     ],
@@ -123,6 +133,7 @@ export function buildExtendedComponentRegistry(): Map<
         icon: DatePickerMeta.icon,
         props: DatePickerPropsSchema,
         meta: DatePickerMeta,
+        a11yProfile: getRigA11yProfile('DatePicker'),
         children: false,
       },
     ],
@@ -134,6 +145,7 @@ export function buildExtendedComponentRegistry(): Map<
         icon: CommandMeta.icon,
         props: CommandPropsSchema,
         meta: CommandMeta,
+        a11yProfile: getRigA11yProfile('Command'),
         children: false,
       },
     ],

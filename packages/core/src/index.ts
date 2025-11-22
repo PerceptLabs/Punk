@@ -47,6 +47,10 @@ export {
   extractTemplatePaths,
 } from './props'
 
+// Accessibility system
+export { getRigA11yProfile, getAllRigA11yProfiles, hasRigA11yProfile } from './a11y/profiles'
+export { A11yContext, useA11yConfig } from './a11y/context'
+
 // Type exports
 export type {
   PunkNode,
@@ -62,4 +66,9 @@ export type {
   ComplexityResult,
   ComponentMeta,
   ComponentRegistration,
+  PunkNodeA11y,
 } from './types'
+
+// Accessibility type exports
+export type { RigA11yProfile } from './a11y/profiles'
+export type { A11yConfig, A11yMode } from './a11y/context'

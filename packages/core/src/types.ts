@@ -7,6 +7,22 @@ import type React from 'react'
 import type { ComponentRegistry } from './registry'
 
 /**
+ * Accessibility metadata for schema nodes.
+ * Used to provide screen reader labels, descriptions, and other ARIA metadata
+ * without cluttering component props.
+ */
+export interface PunkNodeA11y {
+  /** Short label for screen readers (aria-label) */
+  label?: string
+  /** Longer description (aria-describedby) */
+  description?: string
+  /** Table caption or figure caption */
+  caption?: string
+  /** Summary text for complex widgets */
+  summary?: string
+}
+
+/**
  * PunkNode represents a single node in the schema tree
  */
 export type PunkNode = {
@@ -42,6 +58,9 @@ export type PunkNode = {
 
   /** Conditional rendering expression (e.g., 'user.isLoggedIn') */
   condition?: string
+
+  /** Optional per-node accessibility metadata */
+  a11y?: PunkNodeA11y
 }
 
 /**
@@ -108,6 +127,9 @@ export interface PunkRendererProps {
 
   /** Enable error boundary (default: true) */
   errorBoundary?: boolean
+
+  /** Accessibility mode (default: 'relaxed') */
+  a11yMode?: 'off' | 'relaxed' | 'strict'
 }
 
 /**

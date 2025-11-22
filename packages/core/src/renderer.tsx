@@ -8,6 +8,8 @@ import type { PunkNode, PunkSchema, PunkRendererProps, DataContext, ActionBus } 
 import { validateSchema } from './validator'
 import { defaultRegistry } from './registry'
 import { processProps, evaluateCondition, getValueFromPath } from './props'
+import { getRigA11yProfile } from './a11y/profiles'
+import { A11yContext, useA11yConfig, type A11yMode } from './a11y/context'
 
 /**
  * DataContext - provides reactive data to all components
@@ -52,6 +54,7 @@ export function PunkRenderer({
   registry = defaultRegistry,
   onError,
   errorBoundary = true,
+  a11yMode = 'relaxed',
 }: PunkRendererProps): React.ReactElement {
   // Normalize schema input
   const normalizedSchema = useMemo(() => {
@@ -104,23 +107,25 @@ export function PunkRenderer({
 
   // Render content
   const content = (
-    <DataContextReact.Provider value={data}>
-      <ActionBusContext.Provider value={actions}>
-        {Array.isArray(normalizedSchema) ? (
-          <>
-            {normalizedSchema.map((node, index) => (
-              <PunkNodeRenderer
-                key={node.id || node.key || `node-${index}`}
-                node={node}
-                registry={registry}
-              />
-            ))}
-          </>
-        ) : (
-          <PunkNodeRenderer node={normalizedSchema} registry={registry} />
-        )}
-      </ActionBusContext.Provider>
-    </DataContextReact.Provider>
+    <A11yContext.Provider value={{ mode: a11yMode }}>
+      <DataContextReact.Provider value={data}>
+        <ActionBusContext.Provider value={actions}>
+          {Array.isArray(normalizedSchema) ? (
+            <>
+              {normalizedSchema.map((node, index) => (
+                <PunkNodeRenderer
+                  key={node.id || node.key || `node-${index}`}
+                  node={node}
+                  registry={registry}
+                />
+              ))}
+            </>
+          ) : (
+            <PunkNodeRenderer node={normalizedSchema} registry={registry} />
+          )}
+        </ActionBusContext.Provider>
+      </DataContextReact.Provider>
+    </A11yContext.Provider>
   )
 
   if (errorBoundary) {
@@ -128,6 +133,89 @@ export function PunkRenderer({
   }
 
   return content
+}
+
+/**
+ * Helper: Derive A11y attributes from profile and schema metadata
+ */
+function deriveA11yAttributes(
+  node: PunkNode,
+  a11yMode: A11yMode
+): {
+  a11yProps: Record<string, string>
+  descriptionElement: React.ReactElement | null
+} {
+  const profile = getRigA11yProfile(node.type)
+
+  // No profile = no a11y attributes
+  if (!profile) {
+    return { a11yProps: {}, descriptionElement: null }
+  }
+
+  const a11yProps: Record<string, string> = {}
+  let descriptionElement: React.ReactElement | null = null
+
+  // Apply role from profile
+  a11yProps.role = profile.role
+
+  // Check for missing required metadata
+  const missingFields: string[] = []
+  for (const field of profile.required) {
+    if (!node.a11y || !node.a11y[field]) {
+      missingFields.push(field)
+    }
+  }
+
+  // Log warnings/errors for missing metadata (only in development or if mode !== 'off')
+  const isDevelopment = process.env.NODE_ENV === 'development'
+  if (isDevelopment && a11yMode !== 'off' && missingFields.length > 0) {
+    const idStr = node.id ? ` (id: ${node.id})` : ''
+    const message = `[Punk A11y] Rig "${node.type}"${idStr} is missing required a11y metadata: ${missingFields.join(', ')}`
+
+    if (a11yMode === 'strict') {
+      console.error(message)
+    } else {
+      console.warn(message)
+    }
+  }
+
+  // Apply label (required)
+  if (node.a11y?.label) {
+    a11yProps['aria-label'] = node.a11y.label
+  } else if (!isDevelopment && profile.required.includes('label')) {
+    // Auto-generate fallback label in production
+    a11yProps['aria-label'] = `${node.type} visualization`
+  }
+
+  // Apply description (if present)
+  if (node.a11y?.description) {
+    const descId = `desc-${node.id || Math.random().toString(36).substr(2, 9)}`
+    a11yProps['aria-describedby'] = descId
+    descriptionElement = (
+      <span
+        id={descId}
+        className="sr-only"
+        style={{
+          position: 'absolute',
+          width: '1px',
+          height: '1px',
+          padding: '0',
+          margin: '-1px',
+          overflow: 'hidden',
+          clip: 'rect(0, 0, 0, 0)',
+          whiteSpace: 'nowrap',
+          borderWidth: '0',
+        }}
+      >
+        {node.a11y.description}
+      </span>
+    )
+  }
+
+  // Apply caption (for Table components)
+  // Note: This is handled specially by Table component itself
+
+  return { a11yProps, descriptionElement }
 }
 
 /**
@@ -147,6 +235,7 @@ const PunkNodeRenderer = memo(function PunkNodeRenderer({
 }: PunkNodeRendererProps): React.ReactElement | null {
   const data = useDataContext()
   const actions = useActionBus()
+  const a11yConfig = useA11yConfig()
 
   // Security: Prevent excessive nesting
   if (depth > 100) {
@@ -187,6 +276,12 @@ const PunkNodeRenderer = memo(function PunkNodeRenderer({
     return processProps(node.props, data, actions)
   }, [node.props, data, actions])
 
+  // Derive A11y attributes
+  const { a11yProps, descriptionElement } = useMemo(
+    () => deriveA11yAttributes(node, a11yConfig.mode),
+    [node, a11yConfig.mode]
+  )
+
   // Render children recursively
   const children = useMemo(() => {
     if (!node.children || node.children.length === 0) {
@@ -203,12 +298,23 @@ const PunkNodeRenderer = memo(function PunkNodeRenderer({
     ))
   }, [node.children, registry, depth])
 
-  // Merge metadata props
+  // Merge metadata props - a11y attributes come AFTER base props so they win
   const finalProps = {
     ...processedProps,
     'data-testid': node.testId,
     className: node.className,
     style: node.style,
+    ...a11yProps,
+  }
+
+  // If we have a description element, wrap component with a fragment
+  if (descriptionElement) {
+    return (
+      <>
+        <Component {...finalProps}>{children}</Component>
+        {descriptionElement}
+      </>
+    )
   }
 
   return <Component {...finalProps}>{children}</Component>

@@ -122,6 +122,52 @@ NEVER:
 - Create nested buttons or focusable elements
 - Trap keyboard focus
 
+## Accessibility Metadata (Rig A11y Profiles)
+
+Some components (called Rigs) have accessibility requirements defined in their a11yProfile.
+
+**Rules:**
+1. When creating a schema node with a type that has an a11y profile (e.g., Chart, Table, Command, Mermaid):
+   - You MUST add an a11y object to that node
+   - You MUST populate all fields listed in the profile's required metadata (e.g., label, caption)
+   - Use the component's props, data, and context to infer meaningful, human-readable text
+   - Generate labels that describe the purpose and content, not just "chart" or "table"
+
+2. Optional fields (listed in the profile's optional metadata) should be added when they improve clarity for screen reader users.
+
+3. Never add raw aria-* props to component props. Always use the a11y object instead.
+
+4. Use the profile's hint field to understand what makes a good label for that component type.
+
+**Example:**
+{
+  "type": "Chart",
+  "props": {
+    "type": "bar",
+    "data": "{context.sales}"
+  },
+  "a11y": {
+    "label": "Monthly sales bar chart",
+    "description": "Shows sales increasing from 100 in January to 150 in February"
+  }
+}
+
+**Example:**
+{
+  "type": "Table",
+  "props": {
+    "data": "{context.users}",
+    "columns": [
+      {"key": "name", "label": "Name"},
+      {"key": "email", "label": "Email"}
+    ]
+  },
+  "a11y": {
+    "caption": "User directory",
+    "summary": "Table showing user names and email addresses with sortable columns"
+  }
+}
+
 ## Validation Rules
 
 Before outputting any patch:

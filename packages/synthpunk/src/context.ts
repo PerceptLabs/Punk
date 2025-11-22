@@ -547,8 +547,41 @@ function flattenObjectPaths(
  */
 function formatContextForPrompt(context: EpochContext): string {
   let output = 'Available Components:\n'
-  output += Array.from(context.componentRegistry.keys()).join(', ')
+
+  // Build component list with a11y profile information
+  const componentList: string[] = []
+  for (const [type, schema] of context.componentRegistry.entries()) {
+    componentList.push(type)
+  }
+  output += componentList.join(', ')
   output += '\n\n'
+
+  // Include extended components with a11y profiles
+  try {
+    const { buildExtendedComponentRegistry } = require('@punk/extended/schemas')
+    const extendedRegistry = buildExtendedComponentRegistry()
+
+    if (extendedRegistry.size > 0) {
+      output += 'Components with A11y Profiles:\n'
+      for (const [type, entry] of extendedRegistry.entries()) {
+        if (entry.a11yProfile) {
+          const profile = entry.a11yProfile
+          output += `- ${type}:\n`
+          output += `  role: ${profile.role}\n`
+          output += `  required: [${profile.requiredMetadata.join(', ')}]\n`
+          if (profile.optionalMetadata && profile.optionalMetadata.length > 0) {
+            output += `  optional: [${profile.optionalMetadata.join(', ')}]\n`
+          }
+          if (profile.generationHint) {
+            output += `  hint: ${profile.generationHint}\n`
+          }
+        }
+      }
+      output += '\n'
+    }
+  } catch (err) {
+    // @punk/extended not available, skip a11y profiles
+  }
 
   if (context.dataModels.length > 0) {
     output += 'Data Models:\n'
