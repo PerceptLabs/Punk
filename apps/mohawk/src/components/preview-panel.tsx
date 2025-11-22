@@ -7,6 +7,8 @@ type Viewport = 'mobile' | 'tablet' | 'desktop'
 
 interface PreviewPanelProps {
   schema: any
+  onNodeSelect?: (nodeId: string | null) => void
+  selectedNodeId?: string | null
 }
 
 function ViewportToggle({
@@ -99,10 +101,71 @@ function ErrorState({ error }: { error: string }) {
   )
 }
 
-export function PreviewPanel({ schema }: PreviewPanelProps) {
+function SchemaTree({
+  node,
+  onNodeSelect,
+  selectedNodeId,
+  depth = 0
+}: {
+  node: any
+  onNodeSelect: (nodeId: string | null) => void
+  selectedNodeId: string | null
+  depth?: number
+}) {
+  const hasChildren = node?.children && node.children.length > 0
+  const [isExpanded, setIsExpanded] = useState(depth < 2) // Auto-expand first 2 levels
+
+  if (!node) return null
+
+  return (
+    <div className="text-xs">
+      <div
+        className={`flex items-center gap-1 px-2 py-1 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 rounded ${
+          selectedNodeId === node.id ? 'bg-blue-100 dark:bg-blue-900' : ''
+        }`}
+        style={{ paddingLeft: `${depth * 12 + 8}px` }}
+        onClick={(e) => {
+          e.stopPropagation()
+          onNodeSelect(node.id || null)
+        }}
+      >
+        {hasChildren && (
+          <button
+            onClick={(e) => {
+              e.stopPropagation()
+              setIsExpanded(!isExpanded)
+            }}
+            className="w-4 h-4 flex items-center justify-center hover:bg-gray-200 dark:hover:bg-gray-600 rounded"
+          >
+            {isExpanded ? '▼' : '▶'}
+          </button>
+        )}
+        {!hasChildren && <span className="w-4" />}
+        <span className="font-mono text-blue-600 dark:text-blue-400">{node.type}</span>
+        {node.id && <span className="text-gray-500 dark:text-gray-400">#{node.id}</span>}
+      </div>
+      {hasChildren && isExpanded && (
+        <div>
+          {node.children.map((child: any, i: number) => (
+            <SchemaTree
+              key={child.id || `${child.type}-${i}`}
+              node={child}
+              onNodeSelect={onNodeSelect}
+              selectedNodeId={selectedNodeId}
+              depth={depth + 1}
+            />
+          ))}
+        </div>
+      )}
+    </div>
+  )
+}
+
+export function PreviewPanel({ schema, onNodeSelect, selectedNodeId }: PreviewPanelProps) {
   const [viewport, setViewport] = useState<Viewport>('desktop')
   const [renderError, setRenderError] = useState<string | null>(null)
   const [refreshKey, setRefreshKey] = useState(0)
+  const [showTree, setShowTree] = useState(false)
 
   const handleRefresh = () => {
     setRefreshKey(prev => prev + 1)
@@ -129,35 +192,75 @@ export function PreviewPanel({ schema }: PreviewPanelProps) {
     desktop: 'max-w-full'
   }
 
+  const schemaNode = schema?.root || schema
+
   return (
     <div className="flex-1 flex flex-col bg-gray-100 dark:bg-gray-900">
       {/* Toolbar */}
       <div className="p-2 border-b border-gray-300 dark:border-gray-700 flex items-center gap-2 bg-white dark:bg-gray-800">
         <ViewportToggle value={viewport} onChange={setViewport} />
         <div className="flex-1" />
+        {schema && (
+          <button
+            onClick={() => setShowTree(!showTree)}
+            className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
+              showTree
+                ? 'bg-blue-600 text-white'
+                : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
+            }`}
+            title="Toggle Schema Tree"
+          >
+            🌲 Tree
+          </button>
+        )}
         <RefreshButton onClick={handleRefresh} />
         <ExportButton onClick={handleExport} />
       </div>
 
       {/* Preview Container */}
-      <div className="flex-1 overflow-auto p-4">
-        <div
-          className={`bg-white dark:bg-gray-800 shadow-lg mx-auto min-h-full rounded-lg ${viewportClasses[viewport]}`}
-        >
-          {renderError ? (
-            <ErrorState error={renderError} />
-          ) : schema ? (
-            <div key={refreshKey} className="p-4">
-              <PunkRenderer
-                schema={schema}
-                data={{}}
-                actions={{}}
-                onError={(error) => setRenderError(error.message)}
-              />
+      <div className="flex-1 flex overflow-hidden">
+        {/* Schema Tree (Collapsible) */}
+        {showTree && schema && onNodeSelect && (
+          <div className="w-64 border-r border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 overflow-auto p-2">
+            <div className="flex items-center justify-between mb-2 px-2">
+              <h3 className="text-xs font-semibold text-gray-700 dark:text-gray-300">
+                Schema Tree
+              </h3>
+              <button
+                onClick={() => onNodeSelect(null)}
+                className="text-xs text-blue-600 dark:text-blue-400 hover:underline"
+              >
+                Clear
+              </button>
             </div>
-          ) : (
-            <EmptyState />
-          )}
+            <SchemaTree
+              node={schemaNode}
+              onNodeSelect={onNodeSelect}
+              selectedNodeId={selectedNodeId || null}
+            />
+          </div>
+        )}
+
+        {/* Preview Area */}
+        <div className="flex-1 overflow-auto p-4">
+          <div
+            className={`bg-white dark:bg-gray-800 shadow-lg mx-auto min-h-full rounded-lg ${viewportClasses[viewport]}`}
+          >
+            {renderError ? (
+              <ErrorState error={renderError} />
+            ) : schema ? (
+              <div key={refreshKey} className="p-4">
+                <PunkRenderer
+                  schema={schema}
+                  data={{}}
+                  actions={{}}
+                  onError={(error) => setRenderError(error.message)}
+                />
+              </div>
+            ) : (
+              <EmptyState />
+            )}
+          </div>
         </div>
       </div>
     </div>

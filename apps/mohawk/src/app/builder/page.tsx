@@ -25,6 +25,9 @@ export default function BuilderPage() {
   const [isPaletteOpen, setIsPaletteOpen] = useState(true)
   const [showBeginnerMode, setShowBeginnerMode] = useState(false)
 
+  // Node selection state for A11y inspector
+  const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null)
+
   async function handleMessage(message: string) {
     // Add user message to conversation
     const userMessage: Message = {
@@ -215,8 +218,16 @@ export default function BuilderPage() {
 
       {/* Preview Panel */}
       <div className="flex-1 flex flex-col">
-        <PreviewPanel schema={schema} />
-        <SchemaInspector schema={schema} onSchemaChange={setSchema} />
+        <PreviewPanel
+          schema={schema}
+          onNodeSelect={setSelectedNodeId}
+          selectedNodeId={selectedNodeId}
+        />
+        <SchemaInspector
+          schema={schema}
+          selectedNodeId={selectedNodeId}
+          onSchemaChange={setSchema}
+        />
       </div>
     </div>
   )
