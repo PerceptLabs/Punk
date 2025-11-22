@@ -50,6 +50,11 @@ export {
 // Accessibility system
 export { getRigA11yProfile, getAllRigA11yProfiles, hasRigA11yProfile } from './a11y/profiles'
 export { A11yContext, useA11yConfig } from './a11y/context'
+export { repairA11y } from './a11y/repair'
+export { getA11yViolations, summarizeViolations, type A11yViolation } from './a11y/violations'
+
+// Test utilities (for internal testing)
+export { renderSchema, createTestNode, createTestSchema, createTestData } from './a11y/test-utils'
 
 // Type exports
 export type {
